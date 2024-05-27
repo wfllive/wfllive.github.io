@@ -1,0 +1,15 @@
+#sep-center-6--0 .bg-wrap {
+    background-color: rgba(255, 255, 255, 0);
+}#header-img-slogan-btn-img .bg-wrap {
+    background-color: #F2F0ED;
+}
+
+#header-img-slogan-btn-img .bg {
+    background-size: 50px 50px;
+    background-repeat: repeat;
+    background-position: right top;
+    opacity: 0.33;
+}
+#sep-center-6 .bg-wrap {
+    background-color: rgba(255, 255, 255, 0);
+}

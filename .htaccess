@@ -1,0 +1,20 @@
+#AddDefaultCharset utf-8
+
+#ErrorDocument 503 /error404.html
+
+#RewriteEngine On
+#RewriteBase /
+
+# uncomment and set your ip to allow your ip to enter
+#RewriteCond %{REMOTE_ADDR} !1\.2\.3\.4
+# block requests to site, but allow let's encypt generation
+
+#RewriteCond %{REQUEST_URI} !well-known
+
+# allow maintenance page itself
+
+#RewriteCond %{REQUEST_FILENAME} !error404.html
+
+# show 503 for every request
+
+#RewriteRule .* /error404.html [R=503,L]
