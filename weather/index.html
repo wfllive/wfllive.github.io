@@ -18,6 +18,7 @@
     
     <script src="./assets/js/app.js" type="module"></script>
     <script src="./assets/js/route.js" type="module"></script>
+    <script src="https://unpkg.com/@vkontakte/vk-bridge/dist/browser.min.js"></script>
   </head>
   <body>
     <header class="header">
@@ -112,5 +113,23 @@
       
     </section>
     <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+    <script>
+  vkBridge.send("VKWebAppInit", {});
+</script>
+<script>
+  bridge.send('VKWebAppShowBannerAd', {
+  banner_location: 'bottom'
+  })
+  .then((data) => { 
+    if (data.result) {
+      // Баннерная реклама отобразилась
+    }
+  })
+  .catch((error) => {
+    // Ошибка
+    console.log(error);
+  });
+  
+</script>
   </body>
 </html>
