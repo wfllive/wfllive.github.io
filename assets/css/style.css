@@ -1311,3 +1311,24 @@ nav.navbar.bootsnav.footer-menu ul li a:hover{
     background-color: blueviolet;
     color:#fff;
 }
+
+.warning-banner {
+  background-color: #ffcc00; /* Желтый цвет фона */
+  padding: 10px 0;
+  color: #000; /* Черный цвет текста */
+  font-size: 14px;
+  border-bottom: 1px solid #e6b800; /* Темно-желтая граница */
+}
+
+.warning-banner a.btn-warning {
+  margin-left: 10px;
+  background-color: #e6b800;
+  border-color: #cc9900;
+  color: #000;
+  font-weight: bold;
+}
+
+.warning-banner a.btn-warning:hover {
+  background-color: #cc9900;
+  border-color: #b38600;
+}
