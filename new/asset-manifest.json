@@ -1,22 +1,22 @@
 {
   "files": {
-    "main.css": "/static/css/main.ac1f050d.css",
-    "main.js": "/static/js/main.f94c1980.js",
-    "static/media/drag2.png": "/static/media/drag2.a92e0fc8bcf6155e987d.png",
-    "static/media/screen02-light.png": "/static/media/screen02-light.88955c6463227093907f.png",
-    "static/media/screen02-dark.png": "/static/media/screen02-dark.50021f3a3e2b85ab98e6.png",
-    "static/media/screen01-light.png": "/static/media/screen01-light.68f802586448b43c4ff8.png",
-    "static/media/screen01-dark.png": "/static/media/screen01-dark.1bd89f4d6c56125f7250.png",
-    "static/media/screen03-light.png": "/static/media/screen03-light.29de8174fefd698f25e4.png",
-    "static/media/screen03-dark.png": "/static/media/screen03-dark.375f8a5be24ad9668234.png",
-    "static/media/drag1.png": "/static/media/drag1.1f4206e90d467b2d5540.png",
-    "static/media/drag3.png": "/static/media/drag3.c9ef0738cad652799f06.png",
-    "index.html": "/index.html",
-    "main.ac1f050d.css.map": "/static/css/main.ac1f050d.css.map",
-    "main.f94c1980.js.map": "/static/js/main.f94c1980.js.map"
+    "main.css": "/new/static/css/main.ac1f050d.css",
+    "main.js": "/new/static/js/main.8513f576.js",
+    "static/media/drag2.png": "/new/static/media/drag2.a92e0fc8bcf6155e987d.png",
+    "static/media/screen02-light.png": "/new/static/media/screen02-light.88955c6463227093907f.png",
+    "static/media/screen02-dark.png": "/new/static/media/screen02-dark.50021f3a3e2b85ab98e6.png",
+    "static/media/screen01-light.png": "/new/static/media/screen01-light.68f802586448b43c4ff8.png",
+    "static/media/screen01-dark.png": "/new/static/media/screen01-dark.1bd89f4d6c56125f7250.png",
+    "static/media/screen03-light.png": "/new/static/media/screen03-light.29de8174fefd698f25e4.png",
+    "static/media/screen03-dark.png": "/new/static/media/screen03-dark.375f8a5be24ad9668234.png",
+    "static/media/drag1.png": "/new/static/media/drag1.1f4206e90d467b2d5540.png",
+    "static/media/drag3.png": "/new/static/media/drag3.c9ef0738cad652799f06.png",
+    "index.html": "/new/index.html",
+    "main.ac1f050d.css.map": "/new/static/css/main.ac1f050d.css.map",
+    "main.8513f576.js.map": "/new/static/js/main.8513f576.js.map"
   },
   "entrypoints": [
     "static/css/main.ac1f050d.css",
-    "static/js/main.f94c1980.js"
+    "static/js/main.8513f576.js"
   ]
 }
