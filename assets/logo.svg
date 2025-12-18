@@ -1,0 +1,61 @@
+<svg width="70" height="70" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <radialGradient id="bgGradient" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#42A5F5"/>
+      <stop offset="50%" stop-color="#1E88E5"/>
+      <stop offset="100%" stop-color="#1565C0"/>
+    </radialGradient>
+
+    <linearGradient id="cloudGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFFFFF" />
+      <stop offset="50%" stop-color="#F0F4F8" />
+      <stop offset="100%" stop-color="#DCE3E9" />
+    </linearGradient>
+
+    <radialGradient id="sunGradient" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#FFF176" />
+      <stop offset="50%" stop-color="#FFD54F" />
+      <stop offset="100%" stop-color="#FFB300" />
+    </radialGradient>
+
+    <linearGradient id="lightningGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFEA00" />
+      <stop offset="50%" stop-color="#FFB300" />
+      <stop offset="100%" stop-color="#FF8F00" />
+    </linearGradient>
+
+    <filter id="shadow" x="-50%" y="-50%" width="200%" height="200%">
+      <feDropShadow dx="2" dy="2" stdDeviation="2" flood-color="rgba(0,0,0,0.2)" />
+    </filter>
+
+    <pattern id="cloudTexture" patternUnits="userSpaceOnUse" width="4" height="4">
+      <circle cx="2" cy="2" r="1" fill="rgba(255,255,255,0.3)" />
+    </pattern>
+  </defs>
+
+  <!-- Фон -->
+  <circle cx="50" cy="50" r="48" fill="url(#bgGradient)" filter="url(#shadow)" />
+
+  <!-- Солнце -->
+  <g>
+      <line x1="44" y1="32" x2="44" y2="28" stroke="#FFB300" stroke-width="0.5" stroke-linecap="round"/>
+      <line x1="44" y1="52" x2="44" y2="56" stroke="#FFB300" stroke-width="0.5" stroke-linecap="round"/>
+      <line x1="39" y1="37" x2="36" y2="35" stroke="#FFB300" stroke-width="0.5" stroke-linecap="round"/>
+      <line x1="49" y1="37" x2="52" y2="35" stroke="#FFB300" stroke-width="0.5" stroke-linecap="round"/>
+      <line x1="34" y1="42" x2="30" y2="42" stroke="#FFB300" stroke-width="0.5" stroke-linecap="round"/>
+      <line x1="54" y1="42" x2="58" y2="42" stroke="#FFB300" stroke-width="0.5" stroke-linecap="round"/>
+      <line x1="40" y1="46" x2="37" y2="48" stroke="#FFB300" stroke-width="0.5" stroke-linecap="round"/>
+      <line x1="48" y1="46" x2="51" y2="48" stroke="#FFB300" stroke-width="0.5" stroke-linecap="round"/>
+      <line x1="39" y1="47" x2="36" y2="49" stroke="#FFB300" stroke-width="0.5" stroke-linecap="round"/>
+      <line x1="49" y1="47" x2="52" y2="49" stroke="#FFB300" stroke-width="0.5" stroke-linecap="round"/>
+      <circle cx="44" cy="42" r="10" fill="url(#sunGradient)" filter="url(#shadow)" />
+  </g>
+
+  <!-- Облако (исправлено) -->
+  <path d="M65 56c0-6-5-11-11-11-2.3 0-4.4 0.7-6.1 1.9C45.5 44.2 41.8 42 37.5 42 31.1 42 26 47.1 26 53.5S31.1 65 37.5 65H63c3.9 0 7-3.1 7-7z"
+        fill="url(#cloudGradient)" filter="url(#shadow)" />
+
+  <!-- Молния -->
+  <path d="M52 66 L47 76 L51 76 L48 84 L57 70 L53 70 L56 66 Z"
+        fill="url(#lightningGradient)" filter="url(#shadow)" />
+</svg>
