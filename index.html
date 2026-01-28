@@ -291,7 +291,7 @@
   <footer class="fixed bottom-0 left-0 w-full border-t border-gray-200 dark:border-gray-800 bg-white/85 dark:bg-gray-900/85 backdrop-blur-md py-5 text-center">
     <div class="container mx-auto px-4 sm:px-6 max-w-6xl">
       <p class="text-gray-600 dark:text-gray-400">
-        &copy; 2025 WFL Live. Все права защищены.
+        &copy; <span id="copyrightYear"></span> WFL Live. Все права защищены.
       </p>
       
     </div>
@@ -299,6 +299,18 @@
 
   <!-- JavaScript -->
   <script>
+
+  const startYear = 2018;
+    const currentYear = new Date().getFullYear();
+    
+    // Если текущий год равен начальному, показываем только один год
+    // Если разные - показываем диапазон
+    const yearText = startYear === currentYear 
+        ? startYear.toString() 
+        : `${startYear}–${currentYear}`;
+    
+    document.getElementById('copyrightYear').textContent = yearText;
+    
     // --- Логика Темы ---
     const toggleBtn = document.getElementById('theme-toggle');
     const mobileToggleBtn = document.getElementById('mobile-theme-toggle');
