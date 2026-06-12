@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thunderstorm Plus | Гроза Плюс</title>
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        storm: {
+                            50: '#e0e6f0',
+                            100: '#c8deff',
+                            200: '#7bb8ff',
+                            300: '#4a9eff',
+                            400: '#2d7ed9',
+                            500: '#1a5eb3',
+                            600: '#0f1228',
+                            700: '#0d1025',
+                            800: '#0a0a1a',
+                            900: '#060812',
+                        }
+                    },
+                    fontFamily: {
+                        heading: ['Montserrat', 'sans-serif'],
+                        body: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; background: #0a0a1a; }
+        @keyframes cloudDrift {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+        @keyframes pulseDot {
+            0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(74,158,255,0.4); }
+            50% { opacity: 0.7; box-shadow: 0 0 0 6px rgba(74,158,255,0); }
+        }
+        @keyframes rainFall {
+            0% { transform: translateY(-100px); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(calc(100vh + 100px)); opacity: 0; }
+        }
+        .cloud-drift { animation: cloudDrift 60s linear infinite; }
+        .pulse-dot { animation: pulseDot 2s ease-in-out infinite; }
+        .rain-drop { animation: rainFall linear infinite; }
+        .fade-up { opacity: 0; transform: translateY(40px); transition: all 0.8s cubic-bezier(0.16,1,0.3,1); }
+        .fade-up.visible { opacity: 1; transform: translateY(0); }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect, useRef } = React;
+
+        function LightningCanvas() {
+            const canvasRef = useRef(null);
+            const flashRef = useRef(null);
+            const boltsRef = useRef([]);
+            const lastBoltRef = useRef(0);
+
+            class LightningBolt {
+                constructor(w, h) {
+                    this.x = Math.random() * w;
+                    this.y = 0;
+                    this.segments = [];
+                    this.alpha = 1;
+                    this.fadeSpeed = 0.02 + Math.random() * 0.03;
+                    this.active = true;
+                    this.generate(w, h);
+                }
+                generate(w, h) {
+                    let x = this.x, y = this.y;
+                    const endY = h * (0.4 + Math.random() * 0.5);
+                    const steps = 15 + Math.floor(Math.random() * 20);
+                    this.segments = [];
+                    for (let i = 0; i < steps; i++) {
+                        const nx = x + (Math.random() - 0.5) * 80;
+                        const ny = y + (endY - this.y) / steps;
+                        this.segments.push({ x1: x, y1: y, x2: nx, y2: ny });
+                        if (Math.random() < 0.25 && i > 3) {
+                            let bx = nx, by = ny;
+                            const dir = Math.random() < 0.5 ? -1 : 1;
+                            for (let j = 0; j < 2 + Math.floor(Math.random() * 4); j++) {
+                                const nbx = bx + dir * (10 + Math.random() * 30);
+                                const nby = by + 10 + Math.random() * 20;
+                                this.segments.push({ x1: bx, y1: by, x2: nbx, y2: nby, branch: true });
+                                bx = nbx; by = nby;
+                            }
+                        }
+                        x = nx; y = ny;
+                    }
+                }
+                draw(ctx) {
+                    if (!this.active) return;
+                    this.segments.forEach(s => {
+                        const w = s.branch ? 1 : 2;
+                        const a = s.branch ? this.alpha * 0.4 : this.alpha;
+                        ctx.beginPath(); ctx.moveTo(s.x1, s.y1); ctx.lineTo(s.x2, s.y2);
+                        ctx.strokeStyle = `rgba(180,210,255,${a})`; ctx.lineWidth = w; ctx.stroke();
+                        ctx.beginPath(); ctx.moveTo(s.x1, s.y1); ctx.lineTo(s.x2, s.y2);
+                        ctx.strokeStyle = `rgba(100,160,255,${a * 0.3})`; ctx.lineWidth = w + 6; ctx.stroke();
+                        ctx.beginPath(); ctx.moveTo(s.x1, s.y1); ctx.lineTo(s.x2, s.y2);
+                        ctx.strokeStyle = `rgba(74,130,255,${a * 0.1})`; ctx.lineWidth = w + 16; ctx.stroke();
+                    });
+                    this.alpha -= this.fadeSpeed;
+                    if (this.alpha <= 0) this.active = false;
+                }
+            }
+
+            useEffect(() => {
+                const canvas = canvasRef.current;
+                const ctx = canvas.getContext('2d');
+                const resize = () => { canvas.width = window.innerWidth; canvas.height = window.innerHeight; };
+                resize();
+                window.addEventListener('resize', resize);
+                const flash = () => {
+                    const el = flashRef.current;
+                    if (!el) return;
+                    el.style.opacity = '1';
+                    setTimeout(() => { el.style.opacity = '0'; }, 80);
+                    setTimeout(() => { el.style.opacity = '1'; setTimeout(() => { el.style.opacity = '0'; }, 50); }, 120);
+                };
+                const loop = () => {
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                    const now = Date.now();
+                    if (now - lastBoltRef.current > 2000 + Math.random() * 6000) {
+                        boltsRef.current.push(new LightningBolt(canvas.width, canvas.height));
+                        flash();
+                        lastBoltRef.current = now;
+                        if (Math.random() < 0.3) {
+                            setTimeout(() => { boltsRef.current.push(new LightningBolt(canvas.width, canvas.height)); flash(); }, 100 + Math.random() * 200);
+                        }
+                    }
+                    boltsRef.current = boltsRef.current.filter(b => b.active);
+                    boltsRef.current.forEach(b => b.draw(ctx));
+                    requestAnimationFrame(loop);
+                };
+                loop();
+                return () => window.removeEventListener('resize', resize);
+            }, []);
+
+            return (
+                <>
+                    <canvas ref={canvasRef} className="fixed inset-0 z-0 pointer-events-none" />
+                    <div ref={flashRef} className="fixed inset-0 z-[1] pointer-events-none opacity-0 transition-opacity duration-[50ms]"
+                        style={{ background: 'radial-gradient(ellipse at center, rgba(180,200,255,0.08) 0%, transparent 70%)' }} />
+                </>
+            );
+        }
+
+        function Rain() {
+            const drops = Array.from({ length: 80 }, (_, i) => ({
+                id: i, left: Math.random() * 100, height: 15 + Math.random() * 25,
+                duration: 0.5 + Math.random() * 0.8, delay: Math.random() * 3, opacity: 0.1 + Math.random() * 0.3,
+            }));
+            return (
+                <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden">
+                    {drops.map(d => (
+                        <div key={d.id} className="absolute w-px rain-drop"
+                            style={{ left: d.left+'%', height: d.height+'px', animationDuration: d.duration+'s', animationDelay: d.delay+'s', opacity: d.opacity, background: 'linear-gradient(180deg, transparent, rgba(140,170,220,0.3))' }} />
+                    ))}
+                </div>
+            );
+        }
+
+        function useFadeUp() {
+            const ref = useRef(null);
+            useEffect(() => {
+                const el = ref.current;
+                if (!el) return;
+                const obs = new IntersectionObserver(([e]) => { if (e.isIntersecting) el.classList.add('visible'); }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+                obs.observe(el);
+                return () => obs.disconnect();
+            }, []);
+            return ref;
+        }
+
+        const PlayIcon = ({ className = "w-5 h-5" }) => (
+            <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="5 3 19 12 5 21 5 3" /></svg>
+        );
+        const YouTubeIcon = ({ className = "w-5 h-5" }) => (
+            <svg className={className} viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" /></svg>
+        );
+        const VKIcon = ({ className = "w-5 h-5" }) => (
+            <svg className={className} viewBox="0 0 24 24" fill="currentColor"><path d="M15.684 0H8.316C1.592 0 0 1.592 0 8.316v7.368C0 22.408 1.592 24 8.316 24h7.368C22.408 24 24 22.408 24 15.684V8.316C24 1.592 22.391 0 15.684 0zm3.692 17.123h-1.744c-.66 0-.864-.525-2.05-1.727-1.033-1-1.49-1.135-1.744-1.135-.356 0-.458.102-.458.593v1.575c0 .424-.135.678-1.253.678-1.846 0-3.896-1.12-5.335-3.202C4.624 10.857 4.03 8.57 4.03 8.096c0-.254.102-.491.593-.491h1.744c.44 0 .61.203.78.677.863 2.49 2.303 4.675 2.896 4.675.22 0 .322-.102.322-.66V9.721c-.068-1.186-.695-1.287-.695-1.71 0-.204.17-.407.44-.407h2.744c.373 0 .508.203.508.643v3.473c0 .372.17.508.271.508.22 0 .407-.136.813-.542 1.27-1.422 2.18-3.61 2.18-3.61.119-.254.322-.491.763-.491h1.744c.525 0 .643.27.525.643-.22 1.017-2.354 4.031-2.354 4.031-.186.305-.254.44 0 .78.186.254.796.779 1.203 1.253.745.847 1.32 1.558 1.473 2.05.17.49-.085.744-.576.744z" /></svg>
+        );
+        const RutubeIcon = ({ className = "w-5 h-5" }) => (
+            <svg className={className} viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm4.5 12.75l-6 3.75A.75.75 0 0 1 9.375 16V8.5a.75.75 0 0 1 1.125-.65l6 3.75a.75.75 0 0 1 0 1.3z" /></svg>
+        );
+        const TwitblitIcon = ({ className = "w-5 h-5" }) => (
+  <img 
+    src="twitblit_square.webp" 
+    alt="Twitblit Logo" 
+    className={className}
+    style={{ objectFit: 'contain' }}
+  />
+);
+
+        const LINKS = {
+            youtube: 'https://youtube.com/@thunderstormplus?si=H6KGrztzTc-vLb2l',
+            rutube: 'https://rutube.ru/channel/7740507/',
+            vk: 'https://vk.ru/thunderstormplus',
+            twitblit: 'https://twitblit.ru/tb/thunderstorm',
+        };
+
+        function Nav() {
+            const [scrolled, setScrolled] = useState(false);
+            const [menuOpen, setMenuOpen] = useState(false);
+            useEffect(() => {
+                const handler = () => setScrolled(window.scrollY > 50);
+                window.addEventListener('scroll', handler);
+                return () => window.removeEventListener('scroll', handler);
+            }, []);
+            const scroll = (id) => { setMenuOpen(false); document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' }); };
+
+            return (
+                <>
+                    <nav className={`fixed top-0 left-0 w-full z-[100] px-6 md:px-10 h-[72px] flex items-center justify-between border-b border-white/[0.06] transition-all duration-300 ${scrolled ? 'bg-[#070814]/90 shadow-[0_4px_30px_rgba(0,0,0,0.4)]' : 'bg-[#070814]/60'}`}
+                        style={{ backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)' }}>
+                        <a href="#" onClick={(e) => { e.preventDefault(); scroll('home'); }} className="flex items-center gap-3 no-underline">
+                            <svg className="w-10 h-10" viewBox="0 0 40 40" fill="none">
+                                <path d="M22 4L8 22h10l-4 14L28 18H18l4-14z" fill="#4a9eff" stroke="#4a9eff" strokeWidth="1" strokeLinejoin="round" />
+                            </svg>
+                            <div className="flex flex-col leading-tight">
+                                <span className="font-heading font-bold text-base md:text-lg tracking-wide text-storm-50">
+                                    THUNDERSTORM <span className="text-storm-300">PLUS</span>
+                                </span>
+                                <span className="font-heading text-[10px] md:text-xs text-storm-50/40 tracking-widest">
+                                    ГРОЗА ПЛЮС
+                                </span>
+                            </div>
+                        </a>
+                        <ul className="hidden md:flex items-center gap-9 list-none">
+                            <li>
+                                <button onClick={() => scroll('links')}
+                                    className="text-storm-50/50 text-sm font-medium tracking-wide hover:text-storm-50 transition-colors bg-transparent border-none cursor-pointer relative after:content-[''] after:absolute after:bottom-[-4px] after:left-0 after:w-0 after:h-[2px] after:bg-storm-300 after:transition-all hover:after:w-full">
+                                    Ссылки
+                                </button>
+                            </li>
+                        </ul>
+                        <a href={LINKS.youtube} target="_blank" rel="noopener noreferrer"
+                            className="hidden md:inline-flex px-6 py-2.5 bg-storm-300 text-white rounded-lg text-sm font-semibold hover:bg-storm-200 hover:shadow-[0_4px_20px_rgba(74,158,255,0.3)] transition-all no-underline">
+                            Подписаться
+                        </a>
+                        <button onClick={() => setMenuOpen(!menuOpen)} className="md:hidden flex flex-col gap-[5px] p-2 bg-transparent border-none cursor-pointer">
+                            <span className={`block w-6 h-[2px] bg-storm-50 rounded transition-all ${menuOpen ? 'rotate-45 translate-y-[7px]' : ''}`} />
+                            <span className={`block w-6 h-[2px] bg-storm-50 rounded transition-all ${menuOpen ? 'opacity-0' : ''}`} />
+                            <span className={`block w-6 h-[2px] bg-storm-50 rounded transition-all ${menuOpen ? '-rotate-45 -translate-y-[7px]' : ''}`} />
+                        </button>
+                    </nav>
+                    {menuOpen && (
+                        <div className="fixed top-[72px] left-0 w-full bg-[#070814]/95 border-b border-white/[0.06] p-6 z-[99] flex flex-col gap-5 md:hidden"
+                            style={{ backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)' }}>
+                            <button onClick={() => scroll('links')}
+                                className="text-storm-50/50 text-base font-medium text-left hover:text-storm-50 transition-colors bg-transparent border-none cursor-pointer py-2">
+                                Ссылки
+                            </button>
+                            <a href={LINKS.youtube} target="_blank" rel="noopener noreferrer"
+                                className="inline-flex justify-center px-6 py-3 bg-storm-300 text-white rounded-lg text-sm font-semibold hover:bg-storm-200 transition-all no-underline">
+                                Подписаться
+                            </a>
+                        </div>
+                    )}
+                </>
+            );
+        }
+
+        function Hero() {
+            return (
+                <section id="home" className="min-h-screen flex items-center justify-center px-6 md:px-10 pt-[120px] pb-20 relative">
+                    <div className="max-w-[900px] text-center">
+                        <div className="inline-flex items-center gap-2 px-5 py-2 bg-storm-300/[0.08] border border-storm-300/20 rounded-full text-[13px] font-medium text-storm-200 mb-8 tracking-widest uppercase">
+                            <div className="w-1.5 h-1.5 bg-storm-300 rounded-full pulse-dot" />
+                            Видеоканал об охоте на грозы
+                        </div>
+                        <h1 className="font-heading text-5xl md:text-7xl lg:text-8xl font-black leading-none mb-2 tracking-tighter bg-gradient-to-br from-white via-storm-100 to-storm-300 bg-clip-text text-transparent">
+                            THUNDERSTORM
+                        </h1>
+                        <div className="font-heading text-2xl md:text-4xl lg:text-5xl font-light text-storm-200 mb-4 tracking-[0.3em] uppercase">
+                            PLUS
+                        </div>
+                        <div className="flex items-center justify-center gap-3 mb-8">
+                            <div className="h-px w-12 bg-storm-300/30" />
+                            <span className="font-heading text-sm md:text-base text-storm-50/30 tracking-[0.4em] uppercase">
+                                Гроза Плюс
+                            </span>
+                            <div className="h-px w-12 bg-storm-300/30" />
+                        </div>
+                        <p className="text-base md:text-lg leading-relaxed text-storm-50/50 max-w-[620px] mx-auto mb-12">
+                            Thunderstorm Plus | Гроза Плюс -- канал посвященный фильмам об охоте на грозы.
+                        </p>
+                        <div className="flex items-center justify-center gap-5 flex-wrap">
+                            <a href={LINKS.youtube} target="_blank" rel="noopener noreferrer"
+                                className="inline-flex items-center gap-2.5 px-9 py-4 bg-storm-300 text-white rounded-xl text-base font-semibold hover:bg-storm-200 hover:shadow-[0_8px_32px_rgba(74,158,255,0.35)] hover:-translate-y-0.5 transition-all no-underline">
+                                <PlayIcon /> Смотреть видео
+                            </a>
+                            <a href="#links"
+                                onClick={(e) => { e.preventDefault(); document.getElementById('links')?.scrollIntoView({ behavior: 'smooth' }); }}
+                                className="inline-flex items-center gap-2.5 px-9 py-4 bg-transparent text-storm-50 border border-white/[0.15] rounded-xl text-base font-medium hover:border-storm-300/40 hover:bg-storm-300/[0.05] hover:-translate-y-0.5 transition-all no-underline">
+                                Наши площадки
+                            </a>
+                        </div>
+                    </div>
+                </section>
+            );
+        }
+
+        function Links() {
+            const ref = useFadeUp();
+            const platforms = [
+                {
+                    name: 'YouTube | Ютуб',
+                    desc: 'Основной канал с видео об охоте на грозы',
+                    url: LINKS.youtube,
+                    icon: <YouTubeIcon className="w-8 h-8" />,
+                    color: 'from-red-600/20 to-red-900/10',
+                    borderHover: 'hover:border-red-500/40',
+                    iconBg: 'bg-red-500/10',
+                    textColor: 'text-red-400',
+                },
+                {
+                    name: 'Rutube | Рутуб',
+                    desc: 'Дублируем контент на российской платформе',
+                    url: LINKS.rutube,
+                    icon: <RutubeIcon className="w-8 h-8" />,
+                    color: 'from-sky-600/20 to-sky-900/10',
+                    borderHover: 'hover:border-sky-500/40',
+                    iconBg: 'bg-sky-500/10',
+                    textColor: 'text-sky-400',
+                },
+                {
+                    name: 'VK | ВКонтакте',
+                    desc: 'Главная группа и сообщество',
+                    url: LINKS.vk,
+                    icon: <VKIcon className="w-8 h-8" />,
+                    color: 'from-blue-600/20 to-blue-900/10',
+                    borderHover: 'hover:border-blue-500/40',
+                    iconBg: 'bg-blue-500/10',
+                    textColor: 'text-blue-400',
+                },
+                {
+                    name: 'Twitblit | Твитблит',
+                    desc: 'Официальный профиль Thunderstorm Plus | Гроза Плюс',
+                    url: LINKS.twitblit,
+                    icon: <TwitblitIcon className="w-8 h-8" />,
+                    color: 'from-violet-500/20 to-violet-900/10',
+                    borderHover: 'hover:border-violet-700/40',
+                    iconBg: 'bg-violet-700/40',
+                    textColor: 'text-violet-400',
+                },
+            ];
+
+            return (
+                <section id="links" className="py-20 md:py-32 px-6 md:px-10 relative">
+                    <div className="text-center max-w-[700px] mx-auto mb-16">
+                        <p className="text-xs font-semibold text-storm-300 tracking-[3px] uppercase mb-4">Ссылки</p>
+                        <h2 className="font-heading text-3xl md:text-4xl font-extrabold leading-tight mb-5 text-storm-50">
+                            Где нас найти
+                        </h2>
+                        <p className="text-base leading-relaxed text-storm-50/50">
+                            Подписывайтесь на наших площадках, чтобы не пропустить новый контент
+                        </p>
+                    </div>
+                    <div ref={ref} className="fade-up grid grid-cols-1 sm:grid-cols-2 gap-6 max-w-[800px] mx-auto">
+                        {platforms.map((p) => (
+                            <a key={p.name} href={p.url} target="_blank" rel="noopener noreferrer"
+                                className={`group relative block p-8 rounded-2xl border border-white/[0.06] bg-[rgba(15,15,35,0.7)] ${p.borderHover} hover:-translate-y-1 hover:shadow-[0_20px_60px_rgba(0,0,0,0.4)] transition-all no-underline overflow-hidden`}>
+                                <div className={`absolute inset-0 bg-gradient-to-br ${p.color} opacity-0 group-hover:opacity-100 transition-opacity`} />
+                                <div className="relative">
+                                    <div className={`w-16 h-16 rounded-2xl ${p.iconBg} flex items-center justify-center mb-5 ${p.textColor}`}>
+                                        {p.icon}
+                                    </div>
+                                    <h4 className="font-heading text-lg font-bold mb-2 text-storm-50">{p.name}</h4>
+                                    <p className="text-sm text-storm-50/50 leading-relaxed">{p.desc}</p>
+                                    <div className={`mt-4 inline-flex items-center gap-2 text-sm font-medium ${p.textColor} opacity-0 group-hover:opacity-100 transition-opacity`}>
+                                        Перейти
+                                        <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                            <path d="M5 12h14M12 5l7 7-7 7" />
+                                        </svg>
+                                    </div>
+                                </div>
+                            </a>
+                        ))}
+                    </div>
+                </section>
+            );
+        }
+
+        function Footer() {
+            return (
+                <footer className="py-10 px-6 md:px-10 border-t border-white/[0.06]">
+                    <div className="max-w-[1100px] mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
+                        <p className="text-[13px] text-storm-50/40">Thunderstorm Plus | Гроза Плюс. Все права защищены.</p>
+                        <div className="flex gap-6 flex-wrap justify-center">
+                            {[
+                                { label: 'YouTube | Ютуб', url: LINKS.youtube },
+                                { label: 'Rutube | Рутуб', url: LINKS.rutube },
+                                { label: 'VK | ВКонтакте', url: LINKS.vk },
+                                { label: 'Twitblit | Твитблит', url: LINKS.twitblit },
+                            ].map(l => (
+                                <a key={l.label} href={l.url} target="_blank" rel="noopener noreferrer"
+                                    className="text-[13px] text-storm-50/40 hover:text-storm-300 transition-colors no-underline">
+                                    {l.label}
+                                </a>
+                            ))}
+                        </div>
+                    </div>
+                </footer>
+            );
+        }
+
+        function App() {
+            return (
+                <>
+                    <div className="fixed inset-0 z-0"
+                        style={{ background: 'radial-gradient(ellipse at 20% 50%, rgba(10,15,40,0.9) 0%, transparent 70%), radial-gradient(ellipse at 80% 20%, rgba(20,30,60,0.5) 0%, transparent 60%), radial-gradient(ellipse at 50% 100%, rgba(5,10,30,1) 0%, transparent 70%), linear-gradient(180deg, #070a18 0%, #0d1025 30%, #0a0e20 60%, #060812 100%)' }} />
+                    <div className="fixed inset-0 z-0 w-[200%] opacity-[0.15] cloud-drift"
+                        style={{ background: 'radial-gradient(ellipse at 10% 20%, rgba(100,130,180,0.4) 0%, transparent 50%), radial-gradient(ellipse at 40% 15%, rgba(80,110,160,0.3) 0%, transparent 45%), radial-gradient(ellipse at 70% 25%, rgba(90,120,170,0.35) 0%, transparent 55%), radial-gradient(ellipse at 90% 10%, rgba(70,100,150,0.3) 0%, transparent 40%)' }} />
+                    <LightningCanvas />
+                    <Rain />
+                    <div className="relative z-10">
+                        <Nav />
+                        <Hero />
+                        <Links />
+                        <Footer />
+                    </div>
+                </>
+            );
+        }
+
+        ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+    </script>
+</body>
+</html>
