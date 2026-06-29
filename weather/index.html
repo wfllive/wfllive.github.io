@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
   <head>
     <meta charset="utf-8">
     <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WeatherIO - Modern Weather App</title>
+    <title>WeatherIO - Погода онлайн</title>
     <meta name="title" content="Meteo Live Web">
-    <meta name="description" content="Meteo Live Web - Modern Weather Application">
+    <meta name="description" content="Meteo Live Web - Современное приложение погоды">
     
     <link rel="shortcut icon" href="./favicon.svg" type="image/svg+xml" />
     
@@ -35,20 +35,17 @@
       <div class="container">
         
         <a href="#" class="logo">
-          <div class="logo-icon">
-            <span class="m-icon">thunderstorm</span>
-          </div>
-          <span class="logo-text">Weather<span class="logo-accent">IO</span></span>
+          <img src="./assets/images/logo2.png" width="96" height="96" alt="logo" />
         </a>
         
         <div class="search-view" data-search-view>
           
           <div class="search-wrapper">
-            <input type="search" name="search" placeholder="Search city..." autocomplete="off" class="search-field" data-search-field>
+            <input type="search" name="search" placeholder="Поиск города..." autocomplete="off" class="search-field" data-search-field>
             
             <span class="m-icon leading-icon">search</span>
             
-            <button class="icon-btn leading-icon has-state" aria-label="close search" data-search-toggler>
+            <button class="icon-btn leading-icon has-state" aria-label="закрыть поиск" data-search-toggler>
               <span class="m-icon">arrow_back</span>
             </button>
           </div>
@@ -59,13 +56,13 @@
         
         <div class="header-actions">
           
-          <button class="icon-btn has-state" aria-label="open search" data-search-toggler>
+          <button class="icon-btn has-state" aria-label="открыть поиск" data-search-toggler>
             <span class="m-icon icon">search</span>
           </button>
           
           <a href="#/current-location" class="btn-primary has-state" data-current-location-btn>
             <span class="m-icon">my_location</span>
-            <span class="span">Current Location</span>
+            <span class="span">Моё местоположение</span>
           </a>
           
         </div>
@@ -78,7 +75,7 @@
         
         <div class="content-left">
           
-          <section class="section current-weather" aria-label="current weather" data-current-weather></section>
+          <section class="section current-weather" aria-label="текущая погода" data-current-weather></section>
           
           <section class="section forecast" aria-labelledby="forecast-label" data-5-day-forecast></section>
         </div>
@@ -87,14 +84,14 @@
           
           <section class="section highlights" aria-labelledby="highlights-label" data-highlights></section>
           
-          <section class="section hourly-forecast" aria-label="hourly forecast" data-hourly-forecast></section>
+          <section class="section hourly-forecast" aria-label="почасовой прогноз" data-hourly-forecast></section>
           
           <footer class="footer">
             <p class="body-3">
               © 2024 WeatherIO
             </p>
             <p class="body-3">
-              Powered by
+              Работает на
               <a href="https://openweathermap.org/api" title="OpenWeatherMap" target="_blank" rel="noopener">
                 <img src="./assets/images/openweather.png" width="150" height="30" loading="lazy" alt="OpenWeather">
               </a>
@@ -118,10 +115,10 @@
       <div class="error-inner">
         <span class="m-icon error-icon">cloud_off</span>
         <h2 class="heading">404</h2>
-        <p class="body-1">Page not found!</p>
+        <p class="body-1">Страница не найдена!</p>
         <a href="#/weather?lat=51.5073219&lon=-0.1276474" class="btn-primary has-state">
           <span class="m-icon">home</span>
-          <span class="span">Go Home</span>
+          <span class="span">На главную</span>
         </a>
       </div>
     </section>
