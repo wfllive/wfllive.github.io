@@ -84,6 +84,8 @@
   --shadow-3: 0px 8px 32px hsla(240, 50%, 5%, 0.6);
   --shadow-glow: 0px 0px 20px var(--primary-glow);
   --shadow-glow-accent: 0px 0px 20px var(--accent-glow);
+  /* Тень для нижнего края контента */
+  --shadow-bottom: 0 8px 24px rgba(0, 0, 0, 0.5);
   
   /* Border Radius */
   --radius-28: 28px;
@@ -538,38 +540,6 @@ body {
   display: none;
 }
 
-.logo {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.logo-icon {
-  width: 44px;
-  height: 44px;
-  display: grid;
-  place-items: center;
-  background: var(--gradient-primary);
-  border-radius: var(--radius-12);
-  box-shadow: var(--shadow-glow);
-}
-
-.logo-icon .m-icon {
-  font-size: 2.4rem;
-  color: var(--white);
-}
-
-.logo-text {
-  font-size: 2rem;
-  font-weight: var(--weight-bold);
-  color: var(--white);
-  letter-spacing: -0.02em;
-}
-
-.logo-accent {
-  color: var(--primary-light);
-}
-
 .logo img {
   width: 50px;
 }
@@ -737,6 +707,7 @@ article.container::-webkit-scrollbar-button {
   height: 10px;
 }
 
+/* Нижняя тень — фиксирована на content-right, не перекрывает content-left */
 article.container::before {
   content: "";
   position: fixed;
@@ -751,6 +722,38 @@ article.container::before {
 
 .section:not(:last-child) {
   margin-block-end: 16px;
+}
+
+/*-----------------------------------*\
+  #CONTENT LEFT — без нижней тени
+\*-----------------------------------*/
+
+.content-left {
+  position: relative;
+  z-index: 2;
+}
+
+/*-----------------------------------*\
+  #CONTENT RIGHT — нижняя тень только здесь
+\*-----------------------------------*/
+
+.content-right {
+  position: relative;
+}
+
+/* Нижняя тень только для правой колонки */
+.content-right::after {
+  content: "";
+  position: sticky;
+  bottom: 0;
+  left: 0;
+  display: block;
+  width: 100%;
+  height: 40px;
+  background: var(--gradient-1);
+  pointer-events: none;
+  z-index: 2;
+  margin-top: -40px;
 }
 
 /*-----------------------------------*\
@@ -833,7 +836,7 @@ article.container::before {
 }
 
 /*-----------------------------------*\
-  #FORECAST
+  #5 DAY FORECAST
 \*-----------------------------------*/
 
 .forecast-card {
@@ -1292,6 +1295,12 @@ article.container::before {
     position: sticky;
     top: 0;
   }
+  
+  /* На десктопе убираем глобальную нижнюю тень,
+     она будет только на content-right */
+  article.container::before {
+    display: none;
+  }
 
   .section:not(:last-child) {
     margin-block: 20px;
@@ -1504,4 +1513,15 @@ article.container::before {
   .highlight-list {
     grid-template-columns: repeat(4, 1fr);
   }
-    }
+}
+
+/* Мобильная версия: нижняя тень на весь экран */
+@media (max-width: 767px) {
+  .content-right::after {
+    display: none;
+  }
+  
+  article.container::before {
+    display: block;
+  }
+}
