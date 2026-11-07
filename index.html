@@ -21,6 +21,15 @@
     :root{color-scheme:light;--bg:#fff;--text:#111827;--muted:#4b5563;--panel:#f3f4f6;--line:#e5e7eb;--blue:#2563eb;--header:rgba(255,255,255,.91)}
     :root.dark{color-scheme:dark;--bg:#111827;--text:#f3f4f6;--muted:#d1d5db;--panel:#1f2937;--line:#374151;--blue:#60a5fa;--header:rgba(17,24,39,.91)}
     *{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:100px}body{margin:0;background:var(--bg);color:var(--text);font:16px/1.65 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;transition:background .3s,color .3s}a{color:var(--blue);overflow-wrap:anywhere}button{font:inherit;cursor:pointer}header{position:sticky;top:0;z-index:10;background:var(--header);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}.wrap{max-width:1152px;margin:auto;padding:0 24px}.header-inner{min-height:88px;display:flex;align-items:center;justify-content:space-between;gap:20px}.brand{display:flex;align-items:center;gap:10px;color:var(--blue);font-weight:750;font-size:1.25rem;text-decoration:none;white-space:nowrap}.brand svg{width:58px;height:58px;flex:none}.nav{display:flex;align-items:center;gap:20px}.nav a{color:var(--text);text-decoration:none;font-weight:600}.nav a:hover{text-decoration:underline;color:var(--blue)}.theme,.menu-btn{background:transparent;border:1px solid var(--line);color:var(--text);border-radius:999px;padding:8px 16px}.menu-btn{display:none;font-size:1.3rem}.mobile-nav{display:none}.hero{text-align:center;padding:75px 0 80px}h1{font-size:clamp(2.3rem,5vw,4rem);line-height:1.13;letter-spacing:-.035em;margin:0 0 26px}h2{font-size:clamp(1.8rem,3vw,2.5rem);line-height:1.25;text-align:center;margin:0 0 48px}h3{color:var(--blue);font-size:1.2rem;line-height:1.35;margin:0 0 14px}p{margin:0 0 16px}p:last-child{margin-bottom:0}.lead{color:var(--muted);font-size:1.25rem;max-width:720px;margin:0 auto 60px}.phone{width:280px;height:568px;margin:0 auto 60px;background:var(--panel);border-radius:20px;padding:12px;box-shadow:0 10px 40px #0003;display:flex;align-items:center;justify-content:center;overflow:hidden}.phone img{width:100%;height:100%;object-fit:cover;border-radius:14px}.stores{display:flex;justify-content:center}.stores iframe{width:100%;max-width:570px;height:160px;border:0}.donate{display:inline-flex;align-items:center;justify-content:center;gap:10px;margin-top:28px;width:min(100%,448px);padding:16px 30px;border-radius:999px;background:linear-gradient(90deg,#f97316,#ec4899);color:white;font-weight:700;font-size:1.1rem;text-decoration:none;box-shadow:0 8px 20px #0002}.donate:hover{filter:brightness(.95)}section.info{border-top:1px solid var(--line);padding:78px 0}.card{background:var(--panel);border-radius:15px;max-width:896px;margin:auto;padding:clamp(24px,5vw,48px);box-shadow:0 4px 14px #0000000d}.block+.block{margin-top:36px}.card p,.card li{color:var(--muted)}.card ul{padding-left:22px}.card strong{color:var(--text)}.card code{overflow-wrap:anywhere;background:var(--bg);padding:5px 9px;border-radius:6px}footer{border-top:1px solid var(--line);padding:25px 20px;text-align:center;color:var(--muted)}footer p{margin:0 0 6px}.note{font-size:.9rem;border-top:1px solid var(--line);padding-top:20px}.contact-row+.contact-row{margin-top:24px}.contact-row strong{display:block;margin-bottom:4px}
+    /* Стили оригинальных виджета и футера без зависимости от Tailwind. */
+    .store-widget{display:flex;justify-content:center;width:100%;padding:0 16px;margin-top:32px}
+    .store-widget iframe{display:block;width:100%;max-width:570px;height:160px;border:0}
+    body > footer{position:fixed;bottom:0;left:0;width:100%;border-top:1px solid var(--line);background:var(--header);backdrop-filter:blur(12px);padding:20px;text-align:center;z-index:5}
+    body > footer .container{max-width:1152px;margin:auto;padding:0 24px}
+    body > footer footer{position:static;border:0;padding:0;text-align:center}
+    body > footer p{color:var(--muted);margin:0}
+    #contacts{margin-bottom:128px}
+    @media(min-width:768px){.store-widget{margin-left:96px}.store-widget iframe{height:128px}}
     @media(max-width:767px){.wrap{padding:0 18px}.header-inner{min-height:76px}.brand svg{width:48px;height:48px}.nav{display:none}.menu-btn{display:block}.mobile-nav.open{display:flex;flex-direction:column;align-items:center;gap:18px;padding:20px 18px 24px;border-top:1px solid var(--line)}.mobile-nav a{color:var(--text);font-weight:600;text-decoration:none}.hero{padding-top:58px}section.info{padding:60px 0}h2{margin-bottom:36px}}
     @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important}}
   </style>
@@ -60,8 +69,15 @@
         <h1>Точный прогноз погоды<br>всегда под рукой</h1>
         <p class="lead">Удобное, быстрое и красивое приложение. Тёмная тема, радар осадков и грозы.</p>
         <div class="phone"><img src="assets/screen.jpg" alt="Скриншот приложения Метео Жизнь"></div>
-        <div class="stores">
-          <iframe src="https://www.rustore.ru/external/simple-selection/buttons?theme=coloredDark&amp;orientation=default&amp;stores=rustore%3Ahttps%3A%2F%2Fwww.rustore.ru%2Fcatalog%2Fapp%2Fru.wfllive.meteo%3Futm_source%3Davailable_in_rustore%26utm_medium%3Dru.wfllive.meteo%26rsm%3D1%26mt_link_id%3Diios36%26mt_sub1%3Dru.wfllive.meteo%3BappGallery%3Ahttps%3A%2F%2Fappgallery.huawei.com%2Fapp%2FC107172511%3BgooglePlay%3Ahttps%3A%2F%2Fplay.google.com%2Fstore%2Fapps%2Fdetails%3Fid%3Dru.wfllive.meteo" title="Ссылки для скачивания приложения" loading="lazy"></iframe>
+        <!-- Виджет RuStore -->
+        <div class="flex justify-center w-full px-4 mt-8 md:ml-24 store-widget">
+          <iframe
+            src="https://www.rustore.ru/external/simple-selection/buttons?theme=coloredDark&amp;orientation=default&amp;stores=rustore%3Ahttps%3A%2F%2Fwww.rustore.ru%2Fcatalog%2Fapp%2Fru.wfllive.meteo%3Futm_source%3Davailable_in_rustore%26utm_medium%3Dru.wfllive.meteo%26rsm%3D1%26mt_link_id%3Diios36%26mt_sub1%3Dru.wfllive.meteo%3BappGallery%3Ahttps%3A%2F%2Fappgallery.huawei.com%2Fapp%2FC107172511%3BgooglePlay%3Ahttps%3A%2F%2Fplay.google.com%2Fstore%2Fapps%2Fdetails%3Fid%3Dru.wfllive.meteo"
+            frameborder="0"
+            title="Ссылки для скачивания приложения"
+            class="w-full max-w-[570px] h-40 md:h-32 border-0"
+            style="display: block;">
+          </iframe>
         </div>
         <a class="donate" href="https://boosty.to/wfllive/donate" target="_blank" rel="noopener noreferrer"><span aria-hidden="true">♡</span> Поддержать проект</a>
       </div>
@@ -73,7 +89,7 @@
         <div class="card">
           <div class="block">
             <h3>1. Общие положения</h3>
-            <p>Эта политика описывает обработку данных при использовании приложения «ППМ — Прогноз Погоды Молния» (идентификатор <code>ru.wfllive.meteo</code>). Наименование разработчика — WFL live. Приложение предоставляется бесплатно, без регистрации, покупок и платных подписок. Контакт для вопросов: <a href="/cdn-cgi/l/email-protection#84f3e2e8e8edf2e1c4e9e5ede8aaf6f1"><span class="__cf_email__" data-cfemail="5a2d3c3636332c3f1a373b333674282f">[email&#160;protected]</span></a>.</p>
+            <p>Эта политика описывает обработку данных при использовании приложения «ППМ — Прогноз Погоды Молния» (идентификатор <code>ru.wfllive.meteo</code>). Наименование разработчика — WFL live. Приложение предоставляется бесплатно, без регистрации, покупок и платных подписок. Контакт для вопросов: <a href="/cdn-cgi/l/email-protection#b5c2d3d9d9dcc3d0f5d8d4dcd99bc7c0"><span class="__cf_email__" data-cfemail="3641505a5a5f4053765b575f5a184443">[email&#160;protected]</span></a>.</p>
             <p>Информация о работе сайта приведена отдельно в <a href="#site-privacy">разделе о сайте</a>.</p>
           </div>
           <div class="block">
@@ -93,7 +109,7 @@
           </div>
           <div class="block">
             <h3>5. Обращения пользователей и права</h3>
-            <p>При обращении на <a href="/cdn-cgi/l/email-protection#dcabbab0b0b5aab99cb1bdb5b0f2aea9"><span class="__cf_email__" data-cfemail="c9beafa5a5a0bfac89a4a8a0a5e7bbbc">[email&#160;protected]</span></a> адрес электронной почты и содержание сообщения используются для рассмотрения обращения и ответа. Не отправляйте пароли и другие секретные сведения.</p>
+            <p>При обращении на <a href="/cdn-cgi/l/email-protection#0f7869636366796a4f626e6663217d7a"><span class="__cf_email__" data-cfemail="2255444e4e4b5447624f434b4e0c5057">[email&#160;protected]</span></a> адрес электронной почты и содержание сообщения используются для рассмотрения обращения и ответа. Не отправляйте пароли и другие секретные сведения.</p>
             <p>По вопросам обработки данных и реализации предусмотренных законом прав, включая доступ, исправление или удаление данных, можно обратиться к разработчику по указанному адресу. Мы рассмотрим запрос и сообщим о возможных действиях. Если данные находятся в стороннем сервисе и недоступны разработчику для удаления, мы сообщим об этом и, по возможности, укажем, куда обратиться. Возможность выполнения запроса зависит от применимого законодательства и фактически доступных данных.</p>
           </div>
           <div class="block">
@@ -127,7 +143,7 @@
           </div>
           <div class="block">
             <h3>5. Вопросы</h3>
-            <p>По вопросам, связанным с сайтом и обработкой данных, обращайтесь: <a href="/cdn-cgi/l/email-protection#087f6e6464617e6d4865696164267a7d"><span class="__cf_email__" data-cfemail="7f0819131316091a3f121e1613510d0a">[email&#160;protected]</span></a>.</p>
+            <p>По вопросам, связанным с сайтом и обработкой данных, обращайтесь: <a href="/cdn-cgi/l/email-protection#84f3e2e8e8edf2e1c4e9e5ede8aaf6f1"><span class="__cf_email__" data-cfemail="e196878d8d889784a18c80888dcf9394">[email&#160;protected]</span></a>.</p>
           </div>
         </div>
       </div>
@@ -137,7 +153,7 @@
       <div class="wrap">
         <h2>Условия использования приложения</h2>
         <div class="card">
-          <div class="block"><h3>1. Общие положения</h3><p>Эти условия относятся к приложению «ППМ — Прогноз Погоды Молния» (<code>ru.wfllive.meteo</code>). Наименование разработчика — WFL live. Контакт для поддержки: <a href="/cdn-cgi/l/email-protection#ddaabbb1b1b4abb89db0bcb4b1f3afa8"><span class="__cf_email__" data-cfemail="0c7b6a6060657a694c616d6560227e79">[email&#160;protected]</span></a>.</p></div>
+          <div class="block"><h3>1. Общие положения</h3><p>Эти условия относятся к приложению «ППМ — Прогноз Погоды Молния» (<code>ru.wfllive.meteo</code>). Наименование разработчика — WFL live. Контакт для поддержки: <a href="/cdn-cgi/l/email-protection#2f5849434346594a6f424e4643015d5a"><span class="__cf_email__" data-cfemail="d1a6b7bdbdb8a7b491bcb0b8bdffa3a4">[email&#160;protected]</span></a>.</p></div>
           <div class="block"><h3>2. Бесплатное использование</h3><p>Приложение предоставляется бесплатно, без регистрации, покупок и платных подписок. В приложении показываются рекламные баннеры РСЯ. Доступ к интернету оплачивается по тарифам вашего оператора.</p></div>
           <div class="block"><h3>3. Информация о погоде</h3><p>Прогнозы погоды имеют вероятностный характер и могут содержать неточности или обновляться с задержкой. Не используйте приложение как единственный источник информации для решений, связанных с безопасностью. При опасных погодных явлениях следуйте сообщениям официальных метеорологических и экстренных служб.</p></div>
           <div class="block"><h3>4. Работа приложения</h3><p>Возможны технические сбои и перерывы в работе приложения и сторонних сервисов. Непрерывная и безошибочная работа не гарантируется. Эти условия не ограничивают обязательные права пользователей и ответственность, которую нельзя исключить по применимому закону.</p></div>
@@ -150,7 +166,7 @@
       <div class="wrap">
         <h2>Контакты</h2>
         <div class="card">
-          <div class="contact-row"><strong>Email:</strong><a href="/cdn-cgi/l/email-protection#74031218181d02113419151d185a0601"><span class="__cf_email__" data-cfemail="eb9c8d8787829d8eab868a8287c5999e">[email&#160;protected]</span></a></div>
+          <div class="contact-row"><strong>Email:</strong><a href="/cdn-cgi/l/email-protection#b3c4d5dfdfdac5d6f3ded2dadf9dc1c6"><span class="__cf_email__" data-cfemail="82f5e4eeeeebf4e7c2efe3ebeeacf0f7">[email&#160;protected]</span></a></div>
           <div class="contact-row"><strong>Telegram:</strong><a href="https://t.me/wfllive">@wfllive</a></div>
           <div class="contact-row"><strong>ID приложения:</strong><code>ru.wfllive.meteo</code></div>
           <div class="contact-row"><strong>Веб-сайт:</strong><a href="https://meteolive.ru">https://meteolive.ru</a></div>
@@ -158,7 +174,17 @@
       </div>
     </section>
   </main>
-  <footer><p>© <span id="copyrightYear"></span> ППМ — Прогноз Погоды Молния. Все права защищены.</p><p><a href="https://twitblit.ru/tb/thunderstorm" target="_blank" rel="noopener noreferrer">Twitblit профиль</a></p></footer>
+  <!-- Footer -->
+  <footer class="fixed bottom-0 left-0 w-full border-t border-gray-200 dark:border-gray-800 bg-white/85 dark:bg-gray-900/85 backdrop-blur-md py-5 text-center">
+    <div class="container mx-auto px-4 sm:px-6 max-w-6xl">
+      <p class="text-gray-600 dark:text-gray-400">
+        &copy; <span id="copyrightYear"></span> ППМ - Прогноз Погоды Молния. Все права защищены.
+      </p>
+      <footer>
+        <p><a href="https://twitblit.ru/tb/thunderstorm" target="_blank" rel="noopener noreferrer">Twitblit профиль</a></p>
+      </footer>
+    </div>
+  </footer>
   <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
     const startYear = 2019, currentYear = new Date().getFullYear();
     document.getElementById('copyrightYear').textContent = currentYear <= startYear ? String(startYear) : `${startYear}–${currentYear}`;
@@ -180,5 +206,5 @@
     document.addEventListener('click', event => { if (!menu.hidden && !menu.contains(event.target) && !menuButton.contains(event.target)) setMenu(false); });
     document.addEventListener('keydown', event => { if (event.key === 'Escape' && !menu.hidden) { setMenu(false); menuButton.focus(); } });
   </script>
-<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a56e5b1ceef9feb4',t:'MTc5NDA3NTY2Nw=='};var l=window.parent.location,o;try{o=new URL(l.origin).origin}catch(e){try{o=new URL(new URL(l.href).origin).origin}catch(e){o=''}}var u='/cdn-cgi/challenge-platform/scripts/jsd/main.js?ray=a56e5b1ceef9feb4',a=document.createElement('script');a.src=o?new URL(u,o).href:u;document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a56e6df4fb830b83',t:'MTc5NDA3NjQzOQ=='};var l=window.parent.location,o;try{o=new URL(l.origin).origin}catch(e){try{o=new URL(new URL(l.href).origin).origin}catch(e){o=''}}var u='/cdn-cgi/challenge-platform/scripts/jsd/main.js?ray=a56e6df4fb830b83',a=document.createElement('script');a.src=o?new URL(u,o).href:u;document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
