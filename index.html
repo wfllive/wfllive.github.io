@@ -1,211 +1,259 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="ru" class="scroll-smooth">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Метео Жизнь — приложение с прогнозом погоды, картой и радаром осадков.">
-  <meta name="twitblit-verification" content="TWITBLIT-16-0ecBXeV3PUk1iSO45TgP">
-  <link rel="manifest" href="/manifest.json">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="manifest" href="/manifest.json"/>
+  <title>Метео Жизнь</title>
+  <meta name="description" content="Meteo Live - Погода и карта">
   <link rel="icon" href="assets/logo.svg" type="image/svg+xml">
-  <title>Метео Жизнь — погода и карта</title>
-  <script>
-    // Применяем тему до отображения страницы, если доступно локальное хранилище.
-    try {
-      const saved = localStorage.getItem('theme');
-      if (saved === 'dark' || (!saved && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-        document.documentElement.classList.add('dark');
-      }
-    } catch (_) {}
-  </script>
-  <style>
-    :root{color-scheme:light;--bg:#fff;--text:#111827;--muted:#4b5563;--panel:#f3f4f6;--line:#e5e7eb;--blue:#2563eb;--header:rgba(255,255,255,.91)}
-    :root.dark{color-scheme:dark;--bg:#111827;--text:#f3f4f6;--muted:#d1d5db;--panel:#1f2937;--line:#374151;--blue:#60a5fa;--header:rgba(17,24,39,.91)}
-    *{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:100px}body{margin:0;background:var(--bg);color:var(--text);font:16px/1.65 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;transition:background .3s,color .3s}a{color:var(--blue);overflow-wrap:anywhere}button{font:inherit;cursor:pointer}header{position:sticky;top:0;z-index:10;background:var(--header);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}.wrap{max-width:1152px;margin:auto;padding:0 24px}.header-inner{min-height:88px;display:flex;align-items:center;justify-content:space-between;gap:20px}.brand{display:flex;align-items:center;gap:10px;color:var(--blue);font-weight:750;font-size:1.25rem;text-decoration:none;white-space:nowrap}.brand svg{width:58px;height:58px;flex:none}.nav{display:flex;align-items:center;gap:20px}.nav a{color:var(--text);text-decoration:none;font-weight:600}.nav a:hover{text-decoration:underline;color:var(--blue)}.theme,.menu-btn{background:transparent;border:1px solid var(--line);color:var(--text);border-radius:999px;padding:8px 16px}.menu-btn{display:none;font-size:1.3rem}.mobile-nav{display:none}.hero{text-align:center;padding:75px 0 80px}h1{font-size:clamp(2.3rem,5vw,4rem);line-height:1.13;letter-spacing:-.035em;margin:0 0 26px}h2{font-size:clamp(1.8rem,3vw,2.5rem);line-height:1.25;text-align:center;margin:0 0 48px}h3{color:var(--blue);font-size:1.2rem;line-height:1.35;margin:0 0 14px}p{margin:0 0 16px}p:last-child{margin-bottom:0}.lead{color:var(--muted);font-size:1.25rem;max-width:720px;margin:0 auto 60px}.phone{width:280px;height:568px;margin:0 auto 60px;background:var(--panel);border-radius:20px;padding:12px;box-shadow:0 10px 40px #0003;display:flex;align-items:center;justify-content:center;overflow:hidden}.phone img{width:100%;height:100%;object-fit:cover;border-radius:14px}.stores{display:flex;justify-content:center}.stores iframe{width:100%;max-width:570px;height:160px;border:0}.donate{display:inline-flex;align-items:center;justify-content:center;gap:10px;margin-top:28px;width:min(100%,448px);padding:16px 30px;border-radius:999px;background:linear-gradient(90deg,#f97316,#ec4899);color:white;font-weight:700;font-size:1.1rem;text-decoration:none;box-shadow:0 8px 20px #0002}.donate:hover{filter:brightness(.95)}section.info{border-top:1px solid var(--line);padding:78px 0}.card{background:var(--panel);border-radius:15px;max-width:896px;margin:auto;padding:clamp(24px,5vw,48px);box-shadow:0 4px 14px #0000000d}.block+.block{margin-top:36px}.card p,.card li{color:var(--muted)}.card ul{padding-left:22px}.card strong{color:var(--text)}.card code{overflow-wrap:anywhere;background:var(--bg);padding:5px 9px;border-radius:6px}footer{border-top:1px solid var(--line);padding:25px 20px;text-align:center;color:var(--muted)}footer p{margin:0 0 6px}.note{font-size:.9rem;border-top:1px solid var(--line);padding-top:20px}.contact-row+.contact-row{margin-top:24px}.contact-row strong{display:block;margin-bottom:4px}
-    /* Стили оригинальных виджета и футера без зависимости от Tailwind. */
-    .store-widget{display:flex;justify-content:center;width:100%;padding:0 16px;margin-top:32px}
-    .store-widget iframe{display:block;width:100%;max-width:570px;height:160px;border:0}
-    body > footer{position:fixed;bottom:0;left:0;width:100%;border-top:1px solid var(--line);background:var(--header);backdrop-filter:blur(12px);padding:20px;text-align:center;z-index:5}
-    body > footer .container{max-width:1152px;margin:auto;padding:0 24px}
-    body > footer footer{position:static;border:0;padding:0;text-align:center}
-    body > footer p{color:var(--muted);margin:0}
-    #contacts{margin-bottom:128px}
-    @media(min-width:768px){.store-widget{margin-left:96px}.store-widget iframe{height:128px}}
-    @media(max-width:767px){.wrap{padding:0 18px}.header-inner{min-height:76px}.brand svg{width:48px;height:48px}.nav{display:none}.menu-btn{display:block}.mobile-nav.open{display:flex;flex-direction:column;align-items:center;gap:18px;padding:20px 18px 24px;border-top:1px solid var(--line)}.mobile-nav a{color:var(--text);font-weight:600;text-decoration:none}.hero{padding-top:58px}section.info{padding:60px 0}h2{margin-bottom:36px}}
-    @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important}}
-  </style>
+  <meta name="twitblit-verification" content="TWITBLIT-16-0ecBXeV3PUk1iSO45TgP">
+  <!-- Tailwind CSS через CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>tailwind.config = { darkMode: 'class' }</script>
 </head>
-<body id="top">
-  <header>
-    <div class="wrap header-inner">
-      <a class="brand" href="#top" aria-label="Метео Жизнь — на главную">
-        <svg viewBox="0 0 100 100" role="img" aria-label="Логотип Метео Жизнь">
-          <defs>
-            <radialGradient id="bgGradient"><stop stop-color="#42a5f5"/><stop offset="1" stop-color="#1565c0"/></radialGradient>
-            <linearGradient id="cloudGradient" x2="1" y2="1"><stop stop-color="#fff"/><stop offset="1" stop-color="#dce3e9"/></linearGradient>
-            <radialGradient id="sunGradient"><stop stop-color="#fff176"/><stop offset="1" stop-color="#ffb300"/></radialGradient>
-          </defs>
-          <circle cx="50" cy="50" r="48" fill="url(#bgGradient)"/>
-          <circle cx="44" cy="42" r="10" fill="url(#sunGradient)"/>
-          <path d="M65 56c0-6-5-11-11-11-2.3 0-4.4.7-6.1 1.9C45.5 44.2 41.8 42 37.5 42 31.1 42 26 47.1 26 53.5S31.1 65 37.5 65H63c3.9 0 7-3.1 7-7z" fill="url(#cloudGradient)"/>
-          <path d="M52 66 47 76 51 76 48 84 57 70 53 70 56 66Z" fill="#ffb300"/>
-        </svg>
-        <span>Метео Жизнь</span>
-      </a>
-      <nav class="nav" aria-label="Основная навигация">
-        <a href="#top">Главная</a><a href="#app-policy">Политика</a><a href="#terms">Условия</a><a href="#contacts">Контакты</a>
-        <button class="theme" type="button" data-theme-toggle aria-label="Переключить тему">◐ &nbsp;Тема</button>
-      </nav>
-      <button class="menu-btn" type="button" id="menu-button" aria-label="Открыть меню" aria-expanded="false" aria-controls="mobile-nav">☰</button>
+<body class="bg-white text-gray-900 dark:bg-gray-900 dark:text-gray-100 min-h-screen flex flex-col transition-colors duration-300">
+  <!-- Шапка -->
+  <header class="sticky top-0 z-50 border-b border-gray-200 dark:border-gray-800 bg-white/85 dark:bg-gray-900/85 backdrop-blur-md py-4">
+    <div class="container mx-auto px-4 sm:px-6 max-w-6xl">
+      <div class="flex justify-between items-center relative">
+        <!-- Логотип -->
+        <div class="flex items-center gap-2 text-blue-500 dark:text-blue-400 text-xl font-bold z-50">
+          <svg width="70" height="70" viewBox="0 0 100 100" class="mb-3 rounded-lg">
+            <defs>
+              <radialGradient id="bgGradient" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#42A5F5"/><stop offset="50%" stop-color="#1E88E5"/><stop offset="100%" stop-color="#1565C0"/></radialGradient>
+              <linearGradient id="cloudGradient" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#FFFFFF"/><stop offset="50%" stop-color="#F0F4F8"/><stop offset="100%" stop-color="#DCE3E9"/></linearGradient>
+              <radialGradient id="sunGradient" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#FFF176"/><stop offset="50%" stop-color="#FFD54F"/><stop offset="100%" stop-color="#FFB300"/></radialGradient>
+              <linearGradient id="lightningGradient" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#FFEA00"/><stop offset="50%" stop-color="#FFB300"/><stop offset="100%" stop-color="#FF8F00"/></linearGradient>
+              <filter id="shadow" x="-50%" y="-50%" width="200%" height="200%"><feDropShadow dx="2" dy="2" stdDeviation="2" flood-color="rgba(0,0,0,0.2)"/></filter>
+              <pattern id="cloudTexture" patternUnits="userSpaceOnUse" width="4" height="4"><circle cx="2" cy="2" r="1" fill="rgba(255,255,255,0.3)"/></pattern>
+            </defs>
+            <circle cx="50" cy="50" r="48" fill="url(#bgGradient)" filter="url(#shadow)"/>
+            <circle cx="44" cy="42" r="10" fill="url(#sunGradient)" filter="url(#shadow)"/>
+            <line x1="44" y1="32" x2="44" y2="28" stroke="#FFB300" stroke-width="0.5" stroke-linecap="round"/>
+            <line x1="44" y1="52" x2="44" y2="56" stroke="#FFB300" stroke-width="0.5" stroke-linecap="round"/>
+            <line x1="39" y1="37" x2="36" y2="35" stroke="#FFB300" stroke-width="0.5" stroke-linecap="round"/>
+            <line x1="49" y1="37" x2="52" y2="35" stroke="#FFB300" stroke-width="0.5" stroke-linecap="round"/>
+            <line x1="34" y1="42" x2="30" y2="42" stroke="#FFB300" stroke-width="0.5" stroke-linecap="round"/>
+            <line x1="54" y1="42" x2="58" y2="42" stroke="#FFB300" stroke-width="0.5" stroke-linecap="round"/>
+            <line x1="40" y1="46" x2="37" y2="48" stroke="#FFB300" stroke-width="0.5" stroke-linecap="round"/>
+            <line x1="48" y1="46" x2="51" y2="48" stroke="#FFB300" stroke-width="0.5" stroke-linecap="round"/>
+            <line x1="39" y1="47" x2="36" y2="49" stroke="#FFB300" stroke-width="0.5" stroke-linecap="round"/>
+            <line x1="49" y1="47" x2="52" y2="49" stroke="#FFB300" stroke-width="0.5" stroke-linecap="round"/>
+            <path d="M65 56c0-6-5-11-11-11-2.3 0-4.4 0.7-6.1 1.9C45.5 44.2 41.8 42 37.5 42 31.1 42 26 47.1 26 53.5S31.1 65 37.5 65H63c3.9 0 7-3.1 7-7z" fill="url(#cloudGradient)" filter="url(#shadow)"><rect x="26" y="42" width="37" height="23.5" fill="url(#cloudTexture)"/></path>
+            <path d="M52 66 L47 76 L51 76 L48 84 L57 70 L53 70 L56 66 Z" fill="url(#lightningGradient)" filter="url(#shadow)"/>
+          </svg>
+          Метео Жизнь
+        </div>
+        <button class="md:hidden text-gray-700 dark:text-gray-300 text-2xl z-50" id="hamburger-btn">☰</button>
+        <div class="hidden md:flex items-center gap-6" id="nav-menu">
+          <nav class="flex gap-5">
+            <a href="#" class="font-medium hover:text-blue-500 dark:hover:text-blue-400 transition-colors duration-200">Главная</a>
+            <a href="#app-policy" class="font-medium hover:text-blue-500 dark:hover:text-blue-400 transition-colors duration-200">Политика</a>
+            <a href="#contacts" class="font-medium hover:text-blue-500 dark:hover:text-blue-400 transition-colors duration-200">Контакты</a>
+          </nav>
+          <button class="flex items-center gap-2 border border-gray-300 dark:border-gray-700 text-gray-700 dark:text-gray-300 px-4 py-2 rounded-full text-sm hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors duration-200" id="theme-toggle"><span>◐</span> Тема</button>
+        </div>
+      </div>
+      <div class="md:hidden absolute left-0 right-0 top-full mt-1 bg-white/95 dark:bg-gray-900/95 backdrop-blur-lg border-b border-gray-200 dark:border-gray-800 shadow-xl py-8 px-4 flex flex-col items-center gap-6 -translate-y-5 opacity-0 invisible transition-all duration-300 ease-out" id="mobile-nav-menu">
+        <nav class="flex flex-col items-center gap-6 text-lg">
+          <a href="#" class="font-medium hover:text-blue-500 dark:hover:text-blue-400 transition-colors duration-200">Главная</a>
+          <a href="#app-policy" class="font-medium hover:text-blue-500 dark:hover:text-blue-400 transition-colors duration-200">Политика</a>
+          <a href="#contacts" class="font-medium hover:text-blue-500 dark:hover:text-blue-400 transition-colors duration-200">Контакты</a>
+        </nav>
+        <button class="flex items-center gap-2 border border-gray-300 dark:border-gray-700 text-gray-700 dark:text-gray-300 px-6 py-3 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors duration-200" id="mobile-theme-toggle"><span>◐</span> Тема</button>
+      </div>
     </div>
-    <nav id="mobile-nav" class="mobile-nav" aria-label="Мобильная навигация" hidden>
-      <a href="#top">Главная</a><a href="#app-policy">Политика</a><a href="#terms">Условия</a><a href="#contacts">Контакты</a>
-      <button class="theme" type="button" data-theme-toggle aria-label="Переключить тему">◐ &nbsp;Тема</button>
-    </nav>
   </header>
-
-  <main>
-    <section class="hero">
-      <div class="wrap">
-        <h1>Точный прогноз погоды<br>всегда под рукой</h1>
-        <p class="lead">Удобное, быстрое и красивое приложение. Тёмная тема, радар осадков и грозы.</p>
-        <div class="phone"><img src="assets/screen.jpg" alt="Скриншот приложения Метео Жизнь"></div>
-        <!-- Виджет RuStore -->
-        <div class="flex justify-center w-full px-4 mt-8 md:ml-24 store-widget">
-          <iframe
-          src="https://www.rustore.ru/external/simple-selection/buttons?theme=coloredDark&orientation=default&stores=rustore%3Ahttps%3A%2F%2Fwww.rustore.ru%2Fcatalog%2Fapp%2Fru.wfllive.meteo%3Futm_source%3Davailable_in_rustore%26utm_medium%3Dru.wfllive.meteo%26rsm%3D1%26mt_link_id%3Diios36%26mt_sub1%3Dru.wfllive.meteo%3BappGallery%3Ahttps%3A%2F%2Fappgallery.huawei.com%2Fapp%2FC107172511%3BgooglePlay%3Ahttps%3A%2F%2Fplay.google.com%2Fstore%2Fapps%2Fdetails%3Fid%3Dru.wfllive.meteo"
+  <!-- Главный экран -->
+  <section class="py-16 md:py-24 text-center">
+    <div class="container mx-auto px-4 sm:px-6 max-w-6xl">
+      <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold mb-8 leading-tight">Точный прогноз погоды<br>всегда под рукой</h1>
+      <p class="text-xl text-gray-600 dark:text-gray-400 max-w-3xl mx-auto mb-16">Удобное, быстрое и красивое приложение. Темная тема, радар осадков и грозы.</p>
+      <div class="w-[280px] h-[568px] mx-auto mb-20 relative bg-gray-100 dark:bg-gray-800 rounded-[20px] shadow-[0_10px_40px_rgba(0,0,0,0.2)] p-3">
+        <img src="assets/screen.jpg" alt="App Screenshot" class="w-full h-full object-cover rounded-[14px]">
+      </div>
+      <!-- Виджет RuStore -->
+      <div class="flex justify-center w-full px-4 mt-8 md:ml-24">
+        <iframe
+          src="https://www.rustore.ru/external/simple-selection/buttons?theme=coloredDark&amp;orientation=default&amp;stores=rustore%3Ahttps%3A%2F%2Fwww.rustore.ru%2Fcatalog%2Fapp%2Fru.wfllive.meteo%3Futm_source%3Davailable_in_rustore%26utm_medium%3Dru.wfllive.meteo%26rsm%3D1%26mt_link_id%3Diios36%26mt_sub1%3Dru.wfllive.meteo%3BappGallery%3Ahttps%3A%2F%2Fappgallery.huawei.com%2Fapp%2FC107172511%3BgooglePlay%3Ahttps%3A%2F%2Fplay.google.com%2Fstore%2Fapps%2Fdetails%3Fid%3Dru.wfllive.meteo"
           frameborder="0"
           title="Ссылки для скачивания приложения"
-          /* h-40 для мобильных (чтобы кнопки влезли в столбик), h-32 для ПК */
           class="w-full max-w-[570px] h-40 md:h-32 border-0"
           style="display: block;">
         </iframe>
-        </div>
-        <a class="donate" href="https://boosty.to/wfllive/donate" target="_blank" rel="noopener noreferrer"><span aria-hidden="true">♡</span> Поддержать проект</a>
       </div>
-    </section>
+      <!-- Кнопка доната -->
+      <div class="flex justify-center w-full px-4 mt-8">
+        <a href="https://boosty.to/wfllive/donate" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center gap-3 bg-gradient-to-r from-orange-500 to-pink-500 hover:from-orange-600 hover:to-pink-600 text-white font-bold text-lg py-4 px-10 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 max-w-md w-full">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
+          Поддержать проект
+        </a>
+      </div>
+    </div>
+  </section>
+<section class="py-20 border-t border-gray-200 dark:border-gray-800" id="app-policy">
+<div class="container mx-auto px-4 sm:px-6 max-w-6xl">
+<h2 class="text-3xl md:text-4xl font-bold text-center mb-16">Политика конфиденциальности приложения</h2>
+<div class="bg-gray-100 dark:bg-gray-800 p-8 md:p-12 rounded-[15px] shadow-md max-w-4xl mx-auto space-y-10">
+<div>
+<h3 class="text-xl font-bold text-blue-500 dark:text-blue-400 mb-4">1. Общие положения</h3>
+<p class="text-gray-700 dark:text-gray-300 mb-4 last:mb-0">Эта политика описывает обработку данных при использовании приложения «ППМ — Прогноз Погоды Молния» (идентификатор <code class="break-all">ru.wfllive.meteo</code>). Наименование разработчика — WFL live. Приложение предоставляется бесплатно, без регистрации, покупок и платных подписок. Контакт для вопросов: <a class="text-blue-500 dark:text-blue-400 hover:underline break-words" href="/cdn-cgi/l/email-protection#0b7c6d6767627d6e4b666a626725797e"><span class="__cf_email__" data-cfemail="54233238383d22311439353d387a2621">[email&#160;protected]</span></a>.</p>
+<p class="text-gray-700 dark:text-gray-300 mb-4 last:mb-0">Информация о работе сайта приведена отдельно в <a class="text-blue-500 dark:text-blue-400 hover:underline break-words" href="#site-privacy">разделе о сайте</a>.</p>
+</div>
+<div>
+<h3 class="text-xl font-bold text-blue-500 dark:text-blue-400 mb-4">2. Реклама</h3>
+<p class="text-gray-700 dark:text-gray-300 mb-4 last:mb-0">В приложении показываются баннеры Рекламной сети Яндекса (РСЯ). Рекламный SDK может обрабатывать технические сведения об устройстве, рекламные идентификаторы и сведения о взаимодействии с рекламой для её показа, измерения эффективности и предотвращения злоупотреблений. Состав данных и способы их обработки зависят от версии SDK, настроек и разрешений устройства.</p>
+<p class="text-gray-700 dark:text-gray-300 mb-4 last:mb-0">Информация об обработке данных Яндексом: <a class="text-blue-500 dark:text-blue-400 hover:underline break-words" href="https://yandex.ru/legal/confidential/" rel="noopener noreferrer" target="_blank">политика конфиденциальности Яндекса</a>.</p>
+</div>
+<div>
+<h3 class="text-xl font-bold text-blue-500 dark:text-blue-400 mb-4">3. Отчёты о сбоях</h3>
+<p class="text-gray-700 dark:text-gray-300 mb-4 last:mb-0">Для выявления ошибок и повышения стабильности используется AppTracer — модуль Crash Report. Отчёты передаются в сервис AppTracer и используются для диагностики сбоев. Они могут включать сведения об ошибке, стек вызовов и другие технические сведения, предусмотренные работой SDK.</p>
+<p class="text-gray-700 dark:text-gray-300 mb-4 last:mb-0">Согласно документации AppTracer, данные о событиях хранятся за последние 90 дней. Подробности: <a class="text-blue-500 dark:text-blue-400 hover:underline break-words" href="https://apptracer.ru/doc/android/crash-report/" rel="noopener noreferrer" target="_blank">документация AppTracer</a>.</p>
+</div>
+<div>
+<h3 class="text-xl font-bold text-blue-500 dark:text-blue-400 mb-4">4. Доступ разработчика и сторонние сервисы</h3>
+<p class="text-gray-700 dark:text-gray-300 mb-4 last:mb-0">Разработчик не ведёт собственную базу данных, собираемых рекламным SDK и модулем отчётов о сбоях. Данные поступают в соответствующие сторонние сервисы; разработчику доступны статистика и отчёты в пределах возможностей этих сервисов. Разработчик не имеет технической возможности самостоятельно удалять отдельные данные, находящиеся в этих сервисах.</p>
+<p class="text-gray-700 dark:text-gray-300 mb-4 last:mb-0">Обработка данных сторонними сервисами осуществляется в соответствии с их правилами и применимым законодательством. Отсутствие собственной базы не означает, что данные не обрабатываются сторонними сервисами.</p>
+</div>
+<div>
+<h3 class="text-xl font-bold text-blue-500 dark:text-blue-400 mb-4">5. Обращения пользователей и права</h3>
+<p class="text-gray-700 dark:text-gray-300 mb-4 last:mb-0">При обращении на <a class="text-blue-500 dark:text-blue-400 hover:underline break-words" href="/cdn-cgi/l/email-protection#e394858f8f8a9586a38e828a8fcd9196"><span class="__cf_email__" data-cfemail="295e4f4545405f4c6944484045075b5c">[email&#160;protected]</span></a> адрес электронной почты и содержание сообщения используются для рассмотрения обращения и ответа. Не отправляйте пароли и другие секретные сведения.</p>
+<p class="text-gray-700 dark:text-gray-300 mb-4 last:mb-0">По вопросам обработки данных и реализации предусмотренных законом прав, включая доступ, исправление или удаление данных, можно обратиться к разработчику по указанному адресу. Мы рассмотрим запрос и сообщим о возможных действиях. Если данные находятся в стороннем сервисе и недоступны разработчику для удаления, мы сообщим об этом и, по возможности, укажем, куда обратиться. Возможность выполнения запроса зависит от применимого законодательства и фактически доступных данных.</p>
+</div>
+<div>
+<h3 class="text-xl font-bold text-blue-500 dark:text-blue-400 mb-4">6. Защита данных и изменения</h3>
+<p class="text-gray-700 dark:text-gray-300 mb-4 last:mb-0">Абсолютная безопасность передачи и хранения информации не гарантируется. Политика может обновляться при изменении работы приложения или используемых сервисов. Актуальная версия публикуется на этой странице.</p>
+</div>
+</div>
+</div>
+</section>
 
-    <section id="app-policy" class="info">
-      <div class="wrap">
-        <h2>Политика конфиденциальности приложения</h2>
-        <div class="card">
-          <div class="block">
-            <h3>1. Общие положения</h3>
-            <p>Эта политика описывает обработку данных при использовании приложения «ППМ — Прогноз Погоды Молния» (идентификатор <code>ru.wfllive.meteo</code>). Наименование разработчика — WFL live. Приложение предоставляется бесплатно, без регистрации, покупок и платных подписок. Контакт для вопросов: <a href="/cdn-cgi/l/email-protection#b5c2d3d9d9dcc3d0f5d8d4dcd99bc7c0"><span class="__cf_email__" data-cfemail="3641505a5a5f4053765b575f5a184443">[email&#160;protected]</span></a>.</p>
-            <p>Информация о работе сайта приведена отдельно в <a href="#site-privacy">разделе о сайте</a>.</p>
-          </div>
-          <div class="block">
-            <h3>2. Реклама</h3>
-            <p>В приложении показываются баннеры Рекламной сети Яндекса (РСЯ). Рекламный SDK может обрабатывать технические сведения об устройстве, рекламные идентификаторы и сведения о взаимодействии с рекламой для её показа, измерения эффективности и предотвращения злоупотреблений. Состав данных и способы их обработки зависят от версии SDK, настроек и разрешений устройства.</p>
-            <p>Информация об обработке данных Яндексом: <a href="https://yandex.ru/legal/confidential/" target="_blank" rel="noopener noreferrer">политика конфиденциальности Яндекса</a>.</p>
-          </div>
-          <div class="block">
-            <h3>3. Отчёты о сбоях</h3>
-            <p>Для выявления ошибок и повышения стабильности используется AppTracer — модуль Crash Report. Отчёты передаются в сервис AppTracer и используются для диагностики сбоев. Они могут включать сведения об ошибке, стек вызовов и другие технические сведения, предусмотренные работой SDK.</p>
-            <p>Согласно документации AppTracer, данные о событиях хранятся за последние 90 дней. Подробности: <a href="https://apptracer.ru/doc/android/crash-report/" target="_blank" rel="noopener noreferrer">документация AppTracer</a>.</p>
-          </div>
-          <div class="block">
-            <h3>4. Доступ разработчика и сторонние сервисы</h3>
-            <p>Разработчик не ведёт собственную базу данных, собираемых рекламным SDK и модулем отчётов о сбоях. Данные поступают в соответствующие сторонние сервисы; разработчику доступны статистика и отчёты в пределах возможностей этих сервисов. Разработчик не имеет технической возможности самостоятельно удалять отдельные данные, находящиеся в этих сервисах.</p>
-            <p>Обработка данных сторонними сервисами осуществляется в соответствии с их правилами и применимым законодательством. Отсутствие собственной базы не означает, что данные не обрабатываются сторонними сервисами.</p>
-          </div>
-          <div class="block">
-            <h3>5. Обращения пользователей и права</h3>
-            <p>При обращении на <a href="/cdn-cgi/l/email-protection#0f7869636366796a4f626e6663217d7a"><span class="__cf_email__" data-cfemail="2255444e4e4b5447624f434b4e0c5057">[email&#160;protected]</span></a> адрес электронной почты и содержание сообщения используются для рассмотрения обращения и ответа. Не отправляйте пароли и другие секретные сведения.</p>
-            <p>По вопросам обработки данных и реализации предусмотренных законом прав, включая доступ, исправление или удаление данных, можно обратиться к разработчику по указанному адресу. Мы рассмотрим запрос и сообщим о возможных действиях. Если данные находятся в стороннем сервисе и недоступны разработчику для удаления, мы сообщим об этом и, по возможности, укажем, куда обратиться. Возможность выполнения запроса зависит от применимого законодательства и фактически доступных данных.</p>
-          </div>
-          <div class="block">
-            <h3>6. Защита данных и изменения</h3>
-            <p>Абсолютная безопасность передачи и хранения информации не гарантируется. Политика может обновляться при изменении работы приложения или используемых сервисов. Актуальная версия публикуется на этой странице.</p>
-          </div>
-        </div>
-      </div>
-    </section>
+<section class="py-20 border-t border-gray-200 dark:border-gray-800" id="site-privacy">
+<div class="container mx-auto px-4 sm:px-6 max-w-6xl">
+<h2 class="text-3xl md:text-4xl font-bold text-center mb-16">Информация о конфиденциальности сайта</h2>
+<div class="bg-gray-100 dark:bg-gray-800 p-8 md:p-12 rounded-[15px] shadow-md max-w-4xl mx-auto space-y-10">
+<div>
+<h3 class="text-xl font-bold text-blue-500 dark:text-blue-400 mb-4">1. О сайте</h3>
+<p class="text-gray-700 dark:text-gray-300 mb-4 last:mb-0">Сайт <a class="text-blue-500 dark:text-blue-400 hover:underline break-words" href="https://meteolive.ru">meteolive.ru</a> представляет приложение и содержит ссылки на магазины, поддержку проекта и контакты. На странице нет формы регистрации или обратной связи. При обращении по электронной почте адрес и содержание письма используются для рассмотрения обращения и ответа.</p>
+</div>
+<div>
+<h3 class="text-xl font-bold text-blue-500 dark:text-blue-400 mb-4">2. Тема и локальное хранилище</h3>
+<p class="text-gray-700 dark:text-gray-300 mb-4 last:mb-0">Для сохранения выбранной светлой или тёмной темы сайт использует локальное хранилище браузера (localStorage), ключ <code class="break-all">theme</code>. Это не файл cookie. Вы можете удалить сохранённое значение через настройки браузера; после удаления тема может определяться настройками устройства.</p>
+</div>
+<div>
+<h3 class="text-xl font-bold text-blue-500 dark:text-blue-400 mb-4">3. Сторонний виджет и ссылки</h3>
+<p class="text-gray-700 dark:text-gray-300 mb-4 last:mb-0">На странице встроен виджет RuStore со ссылками на магазины приложений. При загрузке виджета браузер обращается к серверам RuStore и передаёт технические данные, необходимые для соединения, в том числе IP-адрес. Виджет может использовать файлы cookie или иные технологии хранения в зависимости от своей работы и настроек браузера. Обработка данных виджетом определяется правилами его поставщика.</p>
+<p class="text-gray-700 dark:text-gray-300 mb-4 last:mb-0">Для оформления страницы сайт также загружает библиотеку Tailwind CSS с внешнего CDN. При этом браузер обращается к серверу CDN и передаёт технические данные, необходимые для соединения, в том числе IP-адрес.</p>
+<p class="text-gray-700 dark:text-gray-300 mb-4 last:mb-0">При переходе по внешним ссылкам, включая магазины приложений, Boosty, Telegram и Twitblit, действуют правила соответствующих сайтов. Проверьте их политики конфиденциальности.</p>
+</div>
+<div>
+<h3 class="text-xl font-bold text-blue-500 dark:text-blue-400 mb-4">4. Серверные данные</h3>
+<p class="text-gray-700 dark:text-gray-300 mb-4 last:mb-0">При открытии сайта технические сведения, в том числе IP-адрес, могут обрабатываться провайдером хостинга и другими участниками доставки сайта в рамках их работы. Состав и сроки хранения таких данных зависят от фактических настроек и правил соответствующих сервисов.</p>
+</div>
+<div>
+<h3 class="text-xl font-bold text-blue-500 dark:text-blue-400 mb-4">5. Вопросы</h3>
+<p class="text-gray-700 dark:text-gray-300 mb-4 last:mb-0">По вопросам, связанным с сайтом и обработкой данных, обращайтесь: <a class="text-blue-500 dark:text-blue-400 hover:underline break-words" href="/cdn-cgi/l/email-protection#35425359595c43507558545c591b4740"><span class="__cf_email__" data-cfemail="81f6e7edede8f7e4c1ece0e8edaff3f4">[email&#160;protected]</span></a>.</p>
+</div>
+</div>
+</div>
+</section>
 
-    <section id="site-privacy" class="info">
-      <div class="wrap">
-        <h2>Информация о конфиденциальности сайта</h2>
-        <div class="card">
-          <div class="block">
-            <h3>1. О сайте</h3>
-            <p>Сайт <a href="https://meteolive.ru">meteolive.ru</a> представляет приложение и содержит ссылки на магазины, поддержку проекта и контакты. На странице нет формы регистрации или обратной связи. При обращении по электронной почте адрес и содержание письма используются для рассмотрения обращения и ответа.</p>
-          </div>
-          <div class="block">
-            <h3>2. Тема и локальное хранилище</h3>
-            <p>Для сохранения выбранной светлой или тёмной темы сайт использует локальное хранилище браузера (localStorage), ключ <code>theme</code>. Это не файл cookie. Вы можете удалить сохранённое значение через настройки браузера; после удаления тема может определяться настройками устройства.</p>
-          </div>
-          <div class="block">
-            <h3>3. Сторонний виджет и ссылки</h3>
-            <p>На странице встроен виджет RuStore со ссылками на магазины приложений. При загрузке виджета браузер обращается к серверам RuStore и передаёт технические данные, необходимые для соединения, в том числе IP-адрес. Виджет может использовать файлы cookie или иные технологии хранения в зависимости от своей работы и настроек браузера. Обработка данных виджетом определяется правилами его поставщика.</p>
-            <p>При переходе по внешним ссылкам, включая магазины приложений, Boosty, Telegram и Twitblit, действуют правила соответствующих сайтов. Проверьте их политики конфиденциальности.</p>
-          </div>
-          <div class="block">
-            <h3>4. Серверные данные</h3>
-            <p>При открытии сайта технические сведения, в том числе IP-адрес, могут обрабатываться провайдером хостинга и другими участниками доставки сайта в рамках их работы. Состав и сроки хранения таких данных зависят от фактических настроек и правил соответствующих сервисов.</p>
-          </div>
-          <div class="block">
-            <h3>5. Вопросы</h3>
-            <p>По вопросам, связанным с сайтом и обработкой данных, обращайтесь: <a href="/cdn-cgi/l/email-protection#84f3e2e8e8edf2e1c4e9e5ede8aaf6f1"><span class="__cf_email__" data-cfemail="e196878d8d889784a18c80888dcf9394">[email&#160;protected]</span></a>.</p>
-          </div>
+<section class="py-20 border-t border-gray-200 dark:border-gray-800" id="terms">
+<div class="container mx-auto px-4 sm:px-6 max-w-6xl">
+<h2 class="text-3xl md:text-4xl font-bold text-center mb-16">Условия использования приложения</h2>
+<div class="bg-gray-100 dark:bg-gray-800 p-8 md:p-12 rounded-[15px] shadow-md max-w-4xl mx-auto space-y-10">
+<div><h3 class="text-xl font-bold text-blue-500 dark:text-blue-400 mb-4">1. Общие положения</h3><p class="text-gray-700 dark:text-gray-300 mb-4 last:mb-0">Эти условия относятся к приложению «ППМ — Прогноз Погоды Молния» (<code class="break-all">ru.wfllive.meteo</code>). Наименование разработчика — WFL live. Контакт для поддержки: <a class="text-blue-500 dark:text-blue-400 hover:underline break-words" href="/cdn-cgi/l/email-protection#f5829399999c8390b598949c99db8780"><span class="__cf_email__" data-cfemail="b8cfded4d4d1ceddf8d5d9d1d496cacd">[email&#160;protected]</span></a>.</p></div>
+<div><h3 class="text-xl font-bold text-blue-500 dark:text-blue-400 mb-4">2. Бесплатное использование</h3><p class="text-gray-700 dark:text-gray-300 mb-4 last:mb-0">Приложение предоставляется бесплатно, без регистрации, покупок и платных подписок. В приложении показываются рекламные баннеры РСЯ. Доступ к интернету оплачивается по тарифам вашего оператора.</p></div>
+<div><h3 class="text-xl font-bold text-blue-500 dark:text-blue-400 mb-4">3. Информация о погоде</h3><p class="text-gray-700 dark:text-gray-300 mb-4 last:mb-0">Прогнозы погоды имеют вероятностный характер и могут содержать неточности или обновляться с задержкой. Не используйте приложение как единственный источник информации для решений, связанных с безопасностью. При опасных погодных явлениях следуйте сообщениям официальных метеорологических и экстренных служб.</p></div>
+<div><h3 class="text-xl font-bold text-blue-500 dark:text-blue-400 mb-4">4. Работа приложения</h3><p class="text-gray-700 dark:text-gray-300 mb-4 last:mb-0">Возможны технические сбои и перерывы в работе приложения и сторонних сервисов. Непрерывная и безошибочная работа не гарантируется. Эти условия не ограничивают обязательные права пользователей и ответственность, которую нельзя исключить по применимому закону.</p></div>
+<div><h3 class="text-xl font-bold text-blue-500 dark:text-blue-400 mb-4">5. Конфиденциальность и изменения</h3><p class="text-gray-700 dark:text-gray-300 mb-4 last:mb-0">Обработка данных описана в <a class="text-blue-500 dark:text-blue-400 hover:underline break-words" href="#app-policy">политике конфиденциальности приложения</a>. Условия могут обновляться при изменении работы приложения. Актуальная версия публикуется на этой странице.</p></div>
+</div>
+</div>
+</section>
+  <!-- Контакты -->
+  <section id="contacts" class="py-20 border-t border-gray-200 dark:border-gray-800 mb-32">
+    <div class="container mx-auto px-4 sm:px-6 max-w-6xl">
+      <h2 class="text-3xl md:text-4xl font-bold text-center mb-16">Контакты</h2>
+      <div class="bg-gray-100 dark:bg-gray-800 p-8 md:p-12 rounded-[15px] shadow-md max-w-4xl mx-auto">
+        <div class="space-y-8">
+          <div class="text-xl"><strong class="block mb-2">Email:</strong><a href="/cdn-cgi/l/email-protection#addacbc1c1c4dbc8edc0ccc4c183dfd8" class="text-blue-500 dark:text-blue-400 hover:underline break-all"><span class="__cf_email__" data-cfemail="74031218181d02113419151d185a0601">[email&#160;protected]</span></a></div>
+          <div class="text-xl"><strong class="block mb-2">Telegram:</strong><a href="https://t.me/wfllive" class="text-blue-500 dark:text-blue-400 hover:underline">@wfllive</a></div>
+          <div class="text-xl"><strong class="block mb-2">ID приложения:</strong><span class="font-mono bg-gray-200 dark:bg-gray-900 px-4 py-2 rounded-lg inline-block mt-2">ru.wfllive.meteo</span></div>
+          <div class="text-xl"><strong class="block mb-2">Веб-сайт:</strong><a href="https://meteolive.ru" class="text-blue-500 dark:text-blue-400 hover:underline break-all">https://meteolive.ru</a></div>
         </div>
       </div>
-    </section>
-
-    <section id="terms" class="info">
-      <div class="wrap">
-        <h2>Условия использования приложения</h2>
-        <div class="card">
-          <div class="block"><h3>1. Общие положения</h3><p>Эти условия относятся к приложению «ППМ — Прогноз Погоды Молния» (<code>ru.wfllive.meteo</code>). Наименование разработчика — WFL live. Контакт для поддержки: <a href="/cdn-cgi/l/email-protection#2f5849434346594a6f424e4643015d5a"><span class="__cf_email__" data-cfemail="d1a6b7bdbdb8a7b491bcb0b8bdffa3a4">[email&#160;protected]</span></a>.</p></div>
-          <div class="block"><h3>2. Бесплатное использование</h3><p>Приложение предоставляется бесплатно, без регистрации, покупок и платных подписок. В приложении показываются рекламные баннеры РСЯ. Доступ к интернету оплачивается по тарифам вашего оператора.</p></div>
-          <div class="block"><h3>3. Информация о погоде</h3><p>Прогнозы погоды имеют вероятностный характер и могут содержать неточности или обновляться с задержкой. Не используйте приложение как единственный источник информации для решений, связанных с безопасностью. При опасных погодных явлениях следуйте сообщениям официальных метеорологических и экстренных служб.</p></div>
-          <div class="block"><h3>4. Работа приложения</h3><p>Возможны технические сбои и перерывы в работе приложения и сторонних сервисов. Непрерывная и безошибочная работа не гарантируется. Эти условия не ограничивают обязательные права пользователей и ответственность, которую нельзя исключить по применимому закону.</p></div>
-          <div class="block"><h3>5. Конфиденциальность и изменения</h3><p>Обработка данных описана в <a href="#app-policy">политике конфиденциальности приложения</a>. Условия могут обновляться при изменении работы приложения. Актуальная версия публикуется на этой странице.</p></div>
-        </div>
-      </div>
-    </section>
-
-    <section id="contacts" class="info">
-      <div class="wrap">
-        <h2>Контакты</h2>
-        <div class="card">
-          <div class="contact-row"><strong>Email:</strong><a href="/cdn-cgi/l/email-protection#b3c4d5dfdfdac5d6f3ded2dadf9dc1c6"><span class="__cf_email__" data-cfemail="82f5e4eeeeebf4e7c2efe3ebeeacf0f7">[email&#160;protected]</span></a></div>
-          <div class="contact-row"><strong>Telegram:</strong><a href="https://t.me/wfllive">@wfllive</a></div>
-          <div class="contact-row"><strong>ID приложения:</strong><code>ru.wfllive.meteo</code></div>
-          <div class="contact-row"><strong>Веб-сайт:</strong><a href="https://meteolive.ru">https://meteolive.ru</a></div>
-        </div>
-      </div>
-    </section>
-  </main>
+    </div>
+  </section>
   <!-- Footer -->
   <footer class="fixed bottom-0 left-0 w-full border-t border-gray-200 dark:border-gray-800 bg-white/85 dark:bg-gray-900/85 backdrop-blur-md py-5 text-center">
     <div class="container mx-auto px-4 sm:px-6 max-w-6xl">
-      <p class="text-gray-600 dark:text-gray-400">
-        &copy; <span id="copyrightYear"></span> ППМ - Прогноз Погоды Молния. Все права защищены.
-      </p>
-      <footer>
-        <p><a href="https://twitblit.ru/tb/thunderstorm" target="_blank" rel="noopener noreferrer">Twitblit профиль</a></p>
-      </footer>
+      <p class="text-gray-600 dark:text-gray-400">&copy; <span id="copyrightYear"></span> ППМ - Прогноз Погоды Молния. Все права защищены.</p>
+      <footer><p><a href="https://twitblit.ru/tb/thunderstorm" target="_blank" rel="noopener noreferrer">Twitblit профиль</a></p></footer>
     </div>
   </footer>
+  <!-- JavaScript -->
   <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
-    const startYear = 2019, currentYear = new Date().getFullYear();
-    document.getElementById('copyrightYear').textContent = currentYear <= startYear ? String(startYear) : `${startYear}–${currentYear}`;
-    document.querySelectorAll('[data-theme-toggle]').forEach(button => button.addEventListener('click', () => {
-      const dark = document.documentElement.classList.toggle('dark');
-      try { localStorage.setItem('theme', dark ? 'dark' : 'light'); } catch (_) {}
-    }));
-    const menuButton = document.getElementById('menu-button');
-    const menu = document.getElementById('mobile-nav');
-    function setMenu(open) {
-      menu.hidden = !open;
-      menu.classList.toggle('open', open);
-      menuButton.setAttribute('aria-expanded', String(open));
-      menuButton.setAttribute('aria-label', open ? 'Закрыть меню' : 'Открыть меню');
-      menuButton.textContent = open ? '✕' : '☰';
+    const startYear = 2019;
+    const currentYear = new Date().getFullYear();
+    const yearText = startYear === currentYear ? startYear.toString() : `${startYear}–${currentYear}`;
+    document.getElementById('copyrightYear').textContent = yearText;
+    // Логика темы
+    const toggleBtn = document.getElementById('theme-toggle');
+    const mobileToggleBtn = document.getElementById('mobile-theme-toggle');
+    const html = document.documentElement;
+    const savedTheme = localStorage.getItem('theme');
+    const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    if (savedTheme === 'dark' || (!savedTheme && systemPrefersDark)) html.classList.add('dark');
+    function toggleTheme() {
+      if (html.classList.contains('dark')) { html.classList.remove('dark'); localStorage.setItem('theme', 'light'); }
+      else { html.classList.add('dark'); localStorage.setItem('theme', 'dark'); }
     }
-    menuButton.addEventListener('click', () => setMenu(menu.hidden));
-    menu.querySelectorAll('a').forEach(link => link.addEventListener('click', () => setMenu(false)));
-    document.addEventListener('click', event => { if (!menu.hidden && !menu.contains(event.target) && !menuButton.contains(event.target)) setMenu(false); });
-    document.addEventListener('keydown', event => { if (event.key === 'Escape' && !menu.hidden) { setMenu(false); menuButton.focus(); } });
+    toggleBtn.addEventListener('click', toggleTheme);
+    if (mobileToggleBtn) mobileToggleBtn.addEventListener('click', toggleTheme);
+    // Логика мобильного меню
+    const hamburgerBtn = document.getElementById('hamburger-btn');
+    const mobileNavMenu = document.getElementById('mobile-nav-menu');
+    const navLinks = document.querySelectorAll('nav a');
+    hamburgerBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      if (mobileNavMenu.classList.contains('invisible')) {
+        mobileNavMenu.classList.remove('invisible', '-translate-y-5', 'opacity-0');
+        mobileNavMenu.classList.add('translate-y-0', 'opacity-100');
+        hamburgerBtn.textContent = '✕';
+      } else {
+        mobileNavMenu.classList.remove('translate-y-0', 'opacity-100');
+        mobileNavMenu.classList.add('-translate-y-5', 'opacity-0', 'invisible');
+        hamburgerBtn.textContent = '☰';
+      }
+    });
+    navLinks.forEach(link => link.addEventListener('click', () => {
+      mobileNavMenu.classList.remove('translate-y-0', 'opacity-100');
+      mobileNavMenu.classList.add('-translate-y-5', 'opacity-0', 'invisible');
+      hamburgerBtn.textContent = '☰';
+    }));
+    document.addEventListener('click', (e) => {
+      if (!mobileNavMenu.contains(e.target) && !hamburgerBtn.contains(e.target) && !mobileNavMenu.classList.contains('invisible')) {
+        mobileNavMenu.classList.remove('translate-y-0', 'opacity-100');
+        mobileNavMenu.classList.add('-translate-y-5', 'opacity-0', 'invisible');
+        hamburgerBtn.textContent = '☰';
+      }
+    });
+    // Плавный скролл
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        const targetId = this.getAttribute('href');
+        if (targetId === '#') return;
+        const targetElement = document.querySelector(targetId);
+        if (targetElement) {
+          const headerOffset = 70;
+          const elementPosition = targetElement.getBoundingClientRect().top;
+          const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+          window.scrollTo({ top: offsetPosition, behavior: "smooth" });
+        }
+      });
+    });
   </script>
-<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a56e6df4fb830b83',t:'MTc5NDA3NjQzOQ=='};var l=window.parent.location,o;try{o=new URL(l.origin).origin}catch(e){try{o=new URL(new URL(l.href).origin).origin}catch(e){o=''}}var u='/cdn-cgi/challenge-platform/scripts/jsd/main.js?ray=a56e6df4fb830b83',a=document.createElement('script');a.src=o?new URL(u,o).href:u;document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</body>
 </html>
